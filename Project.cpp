@@ -149,11 +149,13 @@ public:
 
 void ProgramsInterface()
 {
-    
+    // Option to add, remove, and update programs
+    // Show a list and details of current program(s)
 }
 
 void CoursesInterface()
 {
+    
 }
 
 void GenerateReport()
