@@ -147,6 +147,19 @@ public:
     }
 };
 
+void ProgramsInterface()
+{
+    
+}
+
+void CoursesInterface()
+{
+}
+
+void GenerateReport()
+{
+}
+
 int main()
 {
     cout << "Welcome to Our Outcome Based Education Support System" << endl;
@@ -168,13 +181,21 @@ int main()
     {
         cout << "What would you like to do today?" << endl;
         cout << "1. Manage Programs" << endl;
-    
-        cout << "" cin >> option;
+        cout << "2. Manage Courses" << endl;
+        cout << "3. Generate Report" << endl;
+        cout << "0. Exit" << endl;
+        cin >> option;
         switch (option)
         {
         case 1:
+            ProgramsInterface();
+        case 2:
+            CoursesInterface();
+        case 3:
+            GenerateReport();
         case 0:
             option = 0;
+            cout << "Exiting..." << endl;
             break;
         default:
             cout << "Invalid option selected. Please try again!" << endl;
