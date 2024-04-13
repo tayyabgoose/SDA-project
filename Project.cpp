@@ -66,11 +66,15 @@ public:
 // PLO (Program Learning Outcome)
 class PLO
 {
+private:
+public:
 };
 
 // CLO (Course Learning Outcome)
 class CLO
 {
+private:
+public:
 };
 
 class Evaluation
@@ -98,6 +102,15 @@ public:
 
 class Question
 {
+private:
+    int number;
+    CLO *clo;
+
+public:
+    Question(int number = 1)
+    {
+        this->number = number;
+    }
 };
 
 class User
@@ -114,7 +127,19 @@ class Teacher : public User
 
 class Report
 {
-    
+private:
+public:
+    void CLOTested(CLO *clo)
+    {
+    }
+
+    void CLOsOfCourse(Course *course)
+    {
+    }
+
+    void PLOContainsCourses(PLO *plo)
+    {
+    }
 };
 
 int main()
