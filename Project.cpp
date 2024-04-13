@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -28,6 +29,10 @@ public:
     }
 
     void removeCourse(Course *course)
+    {
+    }
+
+    void listCourses()
     {
     }
 };
@@ -144,4 +149,35 @@ public:
 
 int main()
 {
+    cout << "Welcome to Our Outcome Based Education Support System" << endl;
+    cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
+    char selection;
+    cin >> selection;
+    if (selection == 't')
+    {
+        else if (selection == 'a')
+        {
+        }
+        else
+        {
+            cout << "Invalid user role. Only Teachers and Academic Officers are allowed."
+        }
+    }
+    int option;
+    while (option != 0)
+    {
+        cout << "What would you like to do today?" << endl;
+        cout << "1. Manage Programs" << endl;
+    
+        cout << "" cin >> option;
+        switch (option)
+        {
+        case 1:
+        case 0:
+            option = 0;
+            break;
+        default:
+            cout << "Invalid option selected. Please try again!" << endl;
+        }
+    }
 }
