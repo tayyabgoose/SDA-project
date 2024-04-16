@@ -12,16 +12,21 @@ using namespace std;
 class Program
 {
 private:
+    int ID;
     string name;
+    vector<Course *> courses;
+    vector<PLO *> PLOs;
 
 public:
-    Program(string name)
+    Program(int programID, string programName)
     {
-        this->name = name;
+        ID = programID;
+        name = programName;
     }
 
     void addCourse(Course *course)
     {
+        courses.push_back(course);
     }
 
     void updateCourse(Course *course)
@@ -32,6 +37,16 @@ public:
     {
     }
 
+    vector<Course *> getCourses()
+    {
+        return courses;
+    }
+
+    vector<PLO *> getPLOs()
+    {
+        return PLOs;
+    }
+
     void listCourses()
     {
     }
@@ -40,15 +55,33 @@ public:
 class Course
 {
 private:
+    int ID;
     string name;
+    vector<CLO *> CLOs;
 
 public:
+    Course(int courseID, string courseName)
+    {
+        ID = courseID;
+        name = courseName;
+    }
+
+    int getCourseID()
+    {
+        return ID;
+    }
+
     void addCLO(CLO *clo)
     {
+        CLOs.push_back(clo);
     }
 
     void updateCLO(CLO *clo)
     {
+        cout << "Please enter the description for this CLO ID: " << clo->getID() << endl;
+        string cloDescription;
+        cin >> cloDescription;
+        clo->updateDescription(cloDescription);
     }
 
     void removeCLO(CLO *clo)
@@ -72,28 +105,73 @@ public:
 class PLO
 {
 private:
+    int ID;
+    string description;
+
 public:
+    PLO(int ploID)
+    {
+        ID = ploID;
+    }
+
+    int getID()
+    {
+        return ID;
+    }
+
+    void updateDescription(string cloDescription)
+    {
+        description = cloDescription;
+    }
 };
 
 // CLO (Course Learning Outcome)
 class CLO
 {
 private:
+    int ID;
+    string description;
+    vector<PLO *> relatedPLOs;
+
 public:
+    CLO(int cloID)
+    {
+        ID = cloID;
+    }
+
+    int getID()
+    {
+        return ID;
+    }
+
+    void updateDescription(string description)
+    {
+        this->description = description;
+    }
+
+    void addRelatedPLO(PLO *plo)
+    {
+        relatedPLOs.push_back(plo);
+    }
 };
 
 class Evaluation
 {
 private:
     string type; // Quiz, Assignment, or Exam
+    int ID;
+    vector<CLO *> relatedCLOs;
+    vector<Question *> questions;
 
 public:
-    Evaluation(string type)
+    Evaluation(string evaluationType, int evaluationID)
     {
-        this->type = type;
+        type = evaluationType;
+        ID = evaluationID;
     }
     void addQuestion(Question *question)
     {
+        questions.push_back(question);
     }
 
     void updateQuestion(Question *question)
@@ -103,18 +181,34 @@ public:
     void removeQuestion(Question *question)
     {
     }
+
+    vector<Question *> getQuestions()
+    {
+        return questions;
+    }
 };
 
 class Question
 {
 private:
     int number;
-    CLO *clo;
+    string description;
+    vector<CLO *> relatedCLOs;
 
 public:
     Question(int number = 1)
     {
         this->number = number;
+    }
+
+    void addDescription(string questionDescription)
+    {
+        description = questionDescription;
+    }
+
+    void addRelatedCLO(CLO *clo)
+    {
+        relatedCLOs.push_back(clo);
     }
 };
 
@@ -155,7 +249,6 @@ void ProgramsInterface()
 
 void CoursesInterface()
 {
-    
 }
 
 void GenerateReport()
@@ -203,4 +296,6 @@ int main()
             cout << "Invalid option selected. Please try again!" << endl;
         }
     }
+
+    return 0;
 }
