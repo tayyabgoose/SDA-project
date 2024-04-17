@@ -31,7 +31,7 @@ public:
 
     void updateCourse(Course *course)
     {
-        
+
     }
 
     void removeCourse(Course *course)
