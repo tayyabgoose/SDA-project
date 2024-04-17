@@ -31,6 +31,7 @@ public:
 
     void updateCourse(Course *course)
     {
+        
     }
 
     void removeCourse(Course *course)
@@ -57,6 +58,7 @@ class Course
 private:
     int ID;
     string name;
+    string description;
     vector<CLO *> CLOs;
 
 public:
@@ -98,6 +100,11 @@ public:
 
     void removeEvaluation(Evaluation *evaluation)
     {
+    }
+
+    void updateDescription(string newDescription)
+    {
+        description = newDescription;
     }
 };
 
@@ -214,14 +221,55 @@ public:
 
 class User
 {
+private:
+    string name;
+    int ID;
+
+public:
+    User(string userName, int userID)
+    {
+        name = userName;
+        ID = userID;
+    }
 };
 
 class AcademicOfficer : public User
 {
+private:
+public:
+    AcademicOfficer(string officerName, int officerID) : User(officerName, officerID)
+    {
+    }
+
+    void addProgram(Program *program)
+    {
+    }
+
+    void removeProgram(Program *program)
+    {
+    }
 };
 
 class Teacher : public User
 {
+private:
+    vector<Course *> taughtCourses;
+    vector<Evaluation *> evaluations;
+
+public:
+    Teacher(string teacherName, int teacherID) : User(teacherName, teacherID)
+    {
+    }
+
+    void addTaughtCourse(Course *course)
+    {
+        taughtCourses.push_back(course);
+    }
+
+    void addEvaluation(Evaluation *evaluation)
+    {
+        evaluations.push_back(evaluation);
+    }
 };
 
 class Report
