@@ -31,7 +31,6 @@ public:
 
     void updateCourse(Course *course)
     {
-
     }
 
     void removeCourse(Course *course)
@@ -105,6 +104,11 @@ public:
     void updateDescription(string newDescription)
     {
         description = newDescription;
+    }
+
+    vector<CLO *> getCLO()
+    {
+        return CLOs;
     }
 };
 
