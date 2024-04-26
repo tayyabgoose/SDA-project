@@ -33,7 +33,7 @@ public:
         ID = programID;
         name = programName;
     }
-
+    
     void addCourse(Course *course)
     {
         courses.push_back(course);
@@ -41,6 +41,24 @@ public:
 
     void updateCourse(Course *course)
     {
+        for(int i=0;i<course.size();i++)
+        {
+           if(courses[i].getCourseID()==course.getCouseID())
+           {
+               cout<<"Which attribute would you like to update? enter valid number"<<endl;
+                cout<<"1. Name"<<endl;
+                cout<<"2. Description"<<endl;
+                cout<<"3. Edit CLO"<<endl;
+                int option;
+                cin >> option
+                switch(option)
+                {
+                    case 1:
+                    course.setName()
+                }
+
+           }   
+        }
     }
 
     void removeCourse(Course *course)
