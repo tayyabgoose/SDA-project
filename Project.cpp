@@ -309,14 +309,6 @@ public:
         name = userName;
         ID = userID;
     }
-
-    void addUser()
-    {
-    }
-
-    void removeUser()
-    {
-    }
 };
 
 class AcademicOfficer : public User
@@ -401,6 +393,10 @@ public:
 
 void OBESupportSystem()
 {
+private:
+    vector<User *> users;
+
+public:
     void addProgram()
     {
     }
@@ -415,6 +411,7 @@ void OBESupportSystem()
 
     void addUser()
     {
+        
     }
 
     void removeUser()

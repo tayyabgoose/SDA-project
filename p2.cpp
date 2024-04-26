@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -158,3 +159,6 @@ public:
     // Function implementations for updateTopic and removeTopic are omitted for brevity
 };
 
+=======
+    
+>>>>>>> Stashed changes
