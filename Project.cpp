@@ -69,6 +69,7 @@ private:
     string name;
     string description;
     vector<CLO *> CLOs;
+    vector<Evaluation *> evaluation;
 
 public:
     Course(int courseID, string courseName)
@@ -97,6 +98,17 @@ public:
 
     void removeCLO(CLO *clo)
     {
+        for (auto it = CLOs.begin(); it != CLOs.end();)
+        {
+            if (*it == clo)
+            {
+                it = CLOs.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     void addEvaluation(Evaluation *evaluation)
@@ -119,6 +131,10 @@ public:
     vector<CLO *> getCLO()
     {
         return CLOs;
+    }
+
+    ~Course()
+    {
     }
 };
 
@@ -278,15 +294,11 @@ public:
 
     void addUser()
     {
-
     }
 
     void removeUser()
     {
-
     }
-
-    
 };
 
 class AcademicOfficer : public User
@@ -345,11 +357,10 @@ public:
 
     void addTeacher()
     {
-
     }
 
-    void removeTeacher(){
-
+    void removeTeacher()
+    {
     }
 };
 
@@ -372,28 +383,28 @@ public:
 
 void OBESupportSystem()
 {
-    void addProgram(){
-
+    void addProgram()
+    {
     }
 
-    void removeProgram(){
-
+    void removeProgram()
+    {
     }
 
-    void manageProgram(){
-
+    void manageProgram()
+    {
     }
 
-    void addUser(){
-
+    void addUser()
+    {
     }
 
-    void removeUser(){
-
+    void removeUser()
+    {
     }
 
-    void manageUser(){
-
+    void manageUser()
+    {
     }
 }
 
