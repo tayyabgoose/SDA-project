@@ -39,51 +39,62 @@ public:
         courses.push_back(course);
     }
 
-    void updateCourse(Course *course)
-    {
-        for (int i = 0; i < course.size(); i++)
-        {
-            if (courses[i].getCourseID() == course.getCouseID())
-            {
-                cout << "Which attribute would you like to update? enter valid number" << endl;
-                cout << "1. Name" << endl;
-                cout << "2. Description" << endl;
-                cout << "3. Edit CLO" << endl;
-                int option;
-                cin >> option;
-                int exit = 0;
-                while (exit == 0)
-                {
-                    switch (option)
-                    {
-                    case 1:
-                    {
-                        cout << "What would you like to change the name to?" << endl;
-                        string courseName;
-                        cin >> courseName;
-                        course->setName(courseName);
-                        break;
-                    }
-                    case 2:
-                    {
-                        cout << "What would you like to update the description to?" << endl;
-                        string courseDescription;
-                        cin >> courseDescription;
-                        course->setDescription(courseDescription);
-                        break;
-                    }
-                    default:
-                        cout << "The option you have selected is invalid." << endl;
-                        exit = 1;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+    // void updateCourse(Course *course)
+    // {
+    //     for (int i = 0; i < courses.size(); i++)
+    //     {
+    //         if (courses[i]->getCourseID() == course->getCourseID())
+    //         {
+    //             cout << "Which attribute would you like to update? enter valid number" << endl;
+    //             cout << "1. Name" << endl;
+    //             cout << "2. Description" << endl;
+    //             cout << "3. Edit CLO" << endl;
+    //             int option;
+    //             cin >> option;
+    //             int exit = 0;
+    //             while (exit == 0)
+    //             {
+    //                 switch (option)
+    //                 {
+    //                 case 1:
+    //                 {
+    //                     cout << "What would you like to change the name to?" << endl;
+    //                     string courseName;
+    //                     cin >> courseName;
+    //                     course->setName(courseName);
+    //                     break;
+    //                 }
+    //                 case 2:
+    //                 {
+    //                     cout << "What would you like to update the description to?" << endl;
+    //                     string courseDescription;
+    //                     cin >> courseDescription;
+    //                     course->setDescription(courseDescription);
+    //                     break;
+    //                 }
+    //                 default:
+    //                     cout << "The option you have selected is invalid." << endl;
+    //                     exit = 1;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     void removeCourse(Course *course)
     {
+        for (auto it = courses.begin(); it != courses.end();)
+        {
+            if (*it == course)
+            {
+                it = courses.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     vector<Course *> getCourses()
@@ -98,6 +109,10 @@ public:
 
     void listCourses()
     {
+        for(int i=0;i<courses.size();i++)
+        {
+            cout << courses[i]->getCourseID() << " " << courses[i]->getCourseName() << endl;           
+        }
     }
 };
 
@@ -108,7 +123,7 @@ private:
     string name;
     string description;
     vector<CLO *> CLOs;
-    vector<Evaluation *> evaluation;
+    vector<Evaluation *> evaluations;
 
 public:
     Course(int courseID, string courseName)
@@ -130,6 +145,11 @@ public:
     int getCourseID()
     {
         return ID;
+    }
+
+    string getCourseName()
+    {
+        return name;
     }
 
     void addCLO(CLO *clo)
@@ -162,6 +182,7 @@ public:
 
     void addEvaluation(Evaluation *evaluation)
     {
+        evaluations.push_back(evaluation);
     }
 
     void updateEvaluation(Evaluation *evaluation)
