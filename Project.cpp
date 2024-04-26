@@ -9,6 +9,16 @@
 
 using namespace std;
 
+class Course;
+class PLO;
+class CLO;
+class Evaluation;
+class Question;
+class User;
+class AcademicOfficer;
+class Teacher;
+class Report;
+
 class Program
 {
 private:
@@ -134,6 +144,10 @@ public:
     {
         description = cloDescription;
     }
+
+    void addCLO(CLO *clo)
+    {
+    }
 };
 
 // CLO (Course Learning Outcome)
@@ -142,6 +156,7 @@ class CLO
 private:
     int ID;
     string description;
+    vector<string> topics;
     vector<PLO *> relatedPLOs;
 
 public:
@@ -164,6 +179,19 @@ public:
     {
         relatedPLOs.push_back(plo);
     }
+
+    void addTopic(string topic)
+    {
+        topics.push_back(topic);
+    }
+
+    void updateTopic()
+    {
+    }
+
+    void removeTopic(string topic)
+    {
+    }
 };
 
 class Evaluation
@@ -171,6 +199,7 @@ class Evaluation
 private:
     string type; // Quiz, Assignment, or Exam
     int ID;
+    float marks;
     vector<CLO *> relatedCLOs;
     vector<Question *> questions;
 
@@ -196,6 +225,16 @@ public:
     vector<Question *> getQuestions()
     {
         return questions;
+    }
+
+    void setMarks(float evaluationMarks)
+    {
+        marks = evaluationMarks;
+    }
+
+    float getMarks()
+    {
+        return marks;
     }
 };
 
@@ -228,6 +267,7 @@ class User
 private:
     string name;
     int ID;
+    string password;
 
 public:
     User(string userName, int userID)
@@ -235,6 +275,18 @@ public:
         name = userName;
         ID = userID;
     }
+
+    void addUser()
+    {
+
+    }
+
+    void removeUser()
+    {
+
+    }
+
+    
 };
 
 class AcademicOfficer : public User
@@ -245,11 +297,19 @@ public:
     {
     }
 
-    void addProgram(Program *program)
+    void manageProgram(Program *program)
     {
     }
 
-    void removeProgram(Program *program)
+    void manageCourse(Course *course)
+    {
+    }
+
+    void managePLO(PLO *plo)
+    {
+    }
+
+    void manageCLO(CLO *clo)
     {
     }
 };
@@ -274,6 +334,23 @@ public:
     {
         evaluations.push_back(evaluation);
     }
+
+    void manageEvaluation(Evaluation *evaluation)
+    {
+    }
+
+    void manageMarks(float marks)
+    {
+    }
+
+    void addTeacher()
+    {
+
+    }
+
+    void removeTeacher(){
+
+    }
 };
 
 class Report
@@ -292,6 +369,33 @@ public:
     {
     }
 };
+
+void OBESupportSystem()
+{
+    void addProgram(){
+
+    }
+
+    void removeProgram(){
+
+    }
+
+    void manageProgram(){
+
+    }
+
+    void addUser(){
+
+    }
+
+    void removeUser(){
+
+    }
+
+    void manageUser(){
+
+    }
+}
 
 void ProgramsInterface()
 {
