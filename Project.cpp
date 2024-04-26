@@ -33,7 +33,7 @@ public:
         ID = programID;
         name = programName;
     }
-    
+
     void addCourse(Course *course)
     {
         courses.push_back(course);
@@ -41,23 +41,44 @@ public:
 
     void updateCourse(Course *course)
     {
-        for(int i=0;i<course.size();i++)
+        for (int i = 0; i < course.size(); i++)
         {
-           if(courses[i].getCourseID()==course.getCouseID())
-           {
-               cout<<"Which attribute would you like to update? enter valid number"<<endl;
-                cout<<"1. Name"<<endl;
-                cout<<"2. Description"<<endl;
-                cout<<"3. Edit CLO"<<endl;
+            if (courses[i].getCourseID() == course.getCouseID())
+            {
+                cout << "Which attribute would you like to update? enter valid number" << endl;
+                cout << "1. Name" << endl;
+                cout << "2. Description" << endl;
+                cout << "3. Edit CLO" << endl;
                 int option;
-                cin >> option
-                switch(option)
+                cin >> option;
+                int exit = 0;
+                while (exit == 0)
                 {
+                    switch (option)
+                    {
                     case 1:
-                    course.setName()
+                    {
+                        cout << "What would you like to change the name to?" << endl;
+                        string courseName;
+                        cin >> courseName;
+                        course->setName(courseName);
+                        break;
+                    }
+                    case 2:
+                    {
+                        cout << "What would you like to update the description to?" << endl;
+                        string courseDescription;
+                        cin >> courseDescription;
+                        course->setDescription(courseDescription);
+                        break;
+                    }
+                    default:
+                        cout << "The option you have selected is invalid." << endl;
+                        exit = 1;
+                        break;
+                    }
                 }
-
-           }   
+            }
         }
     }
 
@@ -94,6 +115,16 @@ public:
     {
         ID = courseID;
         name = courseName;
+    }
+
+    void setName(string courseName)
+    {
+        name = courseName;
+    }
+
+    void setDescription(string courseDescription)
+    {
+        description = courseDescription;
     }
 
     int getCourseID()
@@ -411,7 +442,6 @@ public:
 
     void addUser()
     {
-        
     }
 
     void removeUser()
