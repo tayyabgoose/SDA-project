@@ -55,7 +55,6 @@ public:
         courses.push_back(course);
     }
 
-
     void removeCourse(Course *course)
     {
         for (auto it = courses.begin(); it != courses.end();)
@@ -90,13 +89,7 @@ public:
         this->PLOs = PLOs;
     }
 
-    void listCourses()
-    {
-        for(int i=0;i<courses.size();i++)
-        {
-            cout << courses[i]->getCourseID() << " " << courses[i]->getCourseName()<< endl;           
-        }
-    }
+    void listCourses();
 };
 class Course
 {
@@ -156,37 +149,7 @@ public:
         CLOs.push_back(clo);
     }
 
-    void updateCLO(CLO *clo)
-    {
-        cout<<"What would you like to update?"<<endl;
-        cout<<"1. Description"<<endl;
-        cout<<"2. Related PLOs"<<endl;
-        string newDescription;
-        int option;
-        cin >> option;
-        switch(option)
-        {
-            case 1:
-            cout<<"Enter the new description for the CLO"<<endl;
-            cin >> newDescription;
-            clo->updateDescription(newDescription);
-            break;
-            case 2:
-            cout<<"Enter the PLO ID you would like to add"<<endl;
-            int ploID;
-            cin >> ploID;
-            for(int i=0;i<clo->getRelatedPLOs().size();i++)
-            {
-                if(clo->getRelatedPLOs()[i]->getID() == ploID)
-                {
-                    clo->addRelatedPLO(clo->getRelatedPLOs()[i]);
-                }
-            }
-            break;
-            default:
-            cout<<"Invalid option selected. Please try again!"<<endl;
-        }
-    }
+    void updateCLO(CLO *clo);
 
     void removeCLO(CLO *clo)
     {
@@ -208,79 +171,7 @@ public:
         evaluations.push_back(evaluation);
     }
 
-    void updateEvaluation(Evaluation *evaluation)
-    {
-        for(int i=0;i<evaluations.size();i++)
-        {
-            if(evaluations[i] == evaluation)
-            {
-                cout<<"Which attribute of the evaluation would you like to change?"<<endl;
-                cout<<"1. Question"<<endl;
-                cout<<"2. Marks"<<endl;
-                int option;
-                string questionDescription;
-                cin >> option;
-                switch(option)
-                {
-                    case 1:
-                    cout<<"what would you like to change?"<<endl;
-                    cout<<"1. Add Question"<<endl;
-                    cout<<"2. Update Question"<<endl;
-                    cout<<"3. Remove Question"<<endl;
-                    int option1;
-                    cin >> option1;
-                    switch(option1)
-                    {
-                        case 1:
-                        cout<<"Enter the question number"<<endl;
-                        int questionNumber;
-                        cin >> questionNumber;
-                        Question *question = new Question(questionNumber);
-                        cout<<"Enter the question description"<<endl;
-                        cin >> questionDescription;
-                        question->addDescription(questionDescription);
-                        evaluation->addQuestion(question);
-                        break;
-                        case 2:
-                        cout<<"Enter the question number you would like to update"<<endl;
-                        int questionNumber1;
-                        cin >> questionNumber1;
-                        for(int i=0;i<evaluation->getQuestions().size();i++)
-                        {
-                            if(evaluation->getQuestions()[i]->getNumber() == questionNumber1)
-                            {
-                                cout<<"Enter the new description for the question"<<endl;
-                                string newDescription;
-                                cin >> newDescription;
-                                evaluation->getQuestions()[i]->addDescription(newDescription);
-                            }
-                        }
-                        break;
-                        case 3:
-                        cout<<"Enter the question number you would like to remove"<<endl;
-                        int questionNumber2;
-                        cin >> questionNumber2;
-                        for(int i=0;i<evaluation->getQuestions().size();i++)
-                        {
-                            if(evaluation->getQuestions()[i]->getNumber() == questionNumber2)
-                            {
-                                evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
-                            }
-                        }
-                        break;
-                    }
-                    case 2:
-                    cout<<"Enter the new marks for the evaluation"<<endl;
-                    float newMarks;
-                    cin >> newMarks;
-                    evaluation->setMarks(newMarks);
-                    break;
-                    default:
-                    cout<<"Invalid option selected. Please try again!"<<endl;
-                }   
-            }
-    }
-    }
+    void updateEvaluation(Evaluation *evaluation);
 
     void removeEvaluation(Evaluation *evaluation)
     {
@@ -307,14 +198,22 @@ public:
         return CLOs;
     }
 
-    ~Course()
-    {
-        for (int i = 0; i < CLOs.size(); i++)
-        {
-            delete CLOs[i];
-        }
-    }
+    // ~Course()
+    // {
+    //     for (int i = 0; i < CLOs.size(); i++)
+    //     {
+    //         delete CLOs[i];
+    //     }
+    // }
 };
+
+void Program::listCourses()
+{
+    for (int i = 0; i < courses.size(); i++)
+    {
+        cout << courses[i]->getCourseID() << " " << courses[i]->getCourseName() << endl;
+    }
+}
 
 // PLO (Program Learning Outcome)
 class PLO
@@ -334,7 +233,7 @@ public:
     {
         return ID;
     }
-    vector<CLO*> getRelatedCLOs()
+    vector<CLO *> getRelatedCLOs()
     {
         return relatedCLOs;
     }
@@ -397,7 +296,7 @@ public:
             {
                 cout << "Enter the new topic" << endl;
                 string newTopic;
-                cin >> newTopic;
+                std::cin >> newTopic;
                 topics[i] = newTopic;
             }
         }
@@ -434,73 +333,43 @@ public:
         type = evaluationType;
         ID = evaluationID;
     }
+
     string getType()
     {
         return type;
     }
+
     int getID()
     {
         return ID;
     }
+
     float getMarks()
     {
         return marks;
     }
+
+    void setMarks(float evaluationMarks)
+    {
+        marks = evaluationMarks;
+    }
+
     vector<CLO *> getRelatedCLOs()
     {
         return relatedCLOs;
     }
+
     vector<Question *> getQuestions()
     {
         return questions;
     }
+
     void addQuestion(Question *question)
     {
         questions.push_back(question);
     }
 
-    void updateQuestion(Question *question)
-    {
-        cout<<"what would you like to update?"<<endl;
-        cout<<"1. Description"<<endl;
-        cout<<"2. Related CLOs"<<endl;
-        int option;
-        string newDescription;
-        cin >> option;
-        switch(option)
-        {
-            case 1:
-            cout<<"Enter the new description for the question"<<endl;
-            cin >> newDescription;
-            for(int i=0;i<questions.size();i++)
-            {
-                if(questions[i] == question)
-                {
-                    questions[i]->setDescription(newDescription);
-                }
-                
-            }
-            case 2:
-            cout<<"Enter the CLO ID you would like to add"<<endl;
-            int cloID;
-            cin >> cloID;
-            for(int i=0;i<questions.size();i++)
-            {
-                if(questions[i] == question)
-                {
-                    for(int j=0;j<relatedCLOs.size();j++)
-                    {
-                        if(relatedCLOs[j]->getID() == cloID)
-                        {
-                            questions[i]->addRelatedCLO(relatedCLOs[j]);
-                        }
-                    }
-                }
-            }
-
-
-        }
-    }
+    void updateQuestion(Question *question);
 
     void removeQuestion(Question *question)
     {
@@ -515,21 +384,6 @@ public:
                 ++it;
             }
         }
-    }
-
-    vector<Question *> getQuestions()
-    {
-        return questions;
-    }
-
-    void setMarks(float evaluationMarks)
-    {
-        marks = evaluationMarks;
-    }
-
-    float getMarks()
-    {
-        return marks;
     }
 };
 
@@ -615,7 +469,8 @@ public:
 class AcademicOfficer : public User
 {
 private:
-Program *pr;
+    Program *pr;
+
 public:
     AcademicOfficer(string officerName, int officerID) : User(officerName, officerID)
     {
@@ -625,155 +480,175 @@ public:
 
     void manageProgram(Program *program)
     {
-        cout<<"What would you like to do with the program?"<<endl;
-        cout<<"1. Add Course"<<endl;
-        cout<<"2. Remove Course"<<endl;
-        cout<<"3. delete Program"<<endl;
+        cout << "What would you like to do with the program?" << endl;
+        cout << "1. Add Course" << endl;
+        cout << "2. Remove Course" << endl;
+        cout << "3. delete Program" << endl;
         int option;
-        cin >> option;
+        std::cin >> option;
         int courseID;
         string courseName;
-        switch(option)
+        switch (option)
         {
-            case 1:
-                cout<<"Enter the course ID"<<endl;
-                cin >> courseID;
-                cout<<"Enter the course name"<<endl;
-                cin >> courseName;
-                Course *course = new Course(courseID, courseName);
-                program->addCourse(course);
-                break;
-            case 2:
-                cout<<"Enter the course ID you would like to remove"<<endl;
-                cin >> courseID;
-                for(int i=0;i<program->getCourses().size();i++)
+        case 1:
+        {
+            cout << "Enter the course ID" << endl;
+            std::cin >> courseID;
+            cout << "Enter the course name" << endl;
+            std::cin >> courseName;
+            Course *course = new Course(courseID, courseName);
+            program->addCourse(course);
+            break;
+        }
+        case 2:
+        {
+            cout << "Enter the course ID you would like to remove" << endl;
+            std::cin >> courseID;
+            for (int i = 0; i < program->getCourses().size(); i++)
+            {
+                if (program->getCourses()[i]->getCourseID() == courseID)
                 {
-                    if(program->getCourses()[i]->getCourseID() == courseID)
-                    {
-                        program->removeCourse(program->getCourses()[i]);
-                    }
+                    program->removeCourse(program->getCourses()[i]);
                 }
-                break;
-            case 3:
-                delete program;
-                break;
-            default:
-                cout<<"Invalid option selected. Please try again!"<<endl;
+            }
+            break;
+        }
+        case 3:
+        {
+            delete program;
+            break;
+        }
+        default:
+        {
+            cout << "Invalid option selected. Please try again!" << endl;
+        }
         }
     }
 
     void manageCourse(Course *course)
     {
-        cout<<"What would you like to do with the course?"<<endl;
-        cout<<"1. Update Course"<<endl;
-        cout<<"2. Remove Course"<<endl;
+        cout << "What would you like to do with the course?" << endl;
+        cout << "1. Update Course" << endl;
+        cout << "2. Remove Course" << endl;
         int option;
         int option1;
         string newName;
         string newDescription;
-        cin >> option;
-        switch(option)
+        std::cin >> option;
+        switch (option)
         {
+        case 1:
+        {
+            cout << "What would you like to update?" << endl;
+            cout << "1. Name" << endl;
+            cout << "2. Description" << endl;
+            std::cin >> option1;
+            switch (option1)
+            {
             case 1:
-                cout<<"What would you like to update?"<<endl;
-                cout<<"1. Name"<<endl;
-                cout<<"2. Description"<<endl;
-                cin >> option1;
-                switch(option1)
-                {
-                    case 1:
-                    cout<<"Enter the new name for the course"<<endl;
-                    cin >> newName;
-                    course->setName(newName);
-                    break;
-                    case 2:
-                    cout<<"Enter the new description for the course"<<endl;
-                    cin >> newDescription;
-                    course->setDescription(newDescription);
-                    break;
-                    default:
-                    cout<<"Invalid option selected. Please try again!"<<endl;
-                }
+            {
+                cout << "Enter the new name for the course" << endl;
+                std::cin >> newName;
+                course->setName(newName);
                 break;
+            }
             case 2:
-                delete course;
+            {
+                cout << "Enter the new description for the course" << endl;
+                std::cin >> newDescription;
+                course->setDescription(newDescription);
                 break;
+            }
             default:
-                cout<<"Invalid option selected. Please try again!"<<endl;
+            {
+                cout << "Invalid option selected. Please try again!" << endl;
+            }
+            }
+            break;
+        }
+        case 2:
+        {
+            delete course;
+            break;
+        }
+        default:
+        {
+            cout << "Invalid option selected. Please try again!" << endl;
+        }
         }
     }
 
     void managePLO(PLO *plo)
     {
-        cout<<"What would you like to do with the PLO?"<<endl;
-        cout<<"1. Update Description"<<endl;
-        cout<<"2. Add CLO"<<endl;
+        cout << "What would you like to do with the PLO?" << endl;
+        cout << "1. Update Description" << endl;
+        cout << "2. Add CLO" << endl;
         int option;
         string newDescription;
-        cin >> option;
-        switch(option)
+        std::cin >> option;
+        switch (option)
         {
-            case 1:
-            {
-            cout<<"Enter the new description for the PLO"<<endl;
-            cin >> newDescription;
+        case 1:
+        {
+            cout << "Enter the new description for the PLO" << endl;
+            std::cin >> newDescription;
             plo->updateDescription(newDescription);
             break;
-            }
-            case 2:
-            {
-            cout<<"Enter the CLO ID you would like to add"<<endl;
+        }
+        case 2:
+        {
+            cout << "Enter the CLO ID you would like to add" << endl;
             int cloID;
-            cin >> cloID;
-            for(int i=0;i<plo->getRelatedCLOs().size();i++)
+            std::cin >> cloID;
+            for (int i = 0; i < plo->getRelatedCLOs().size(); i++)
             {
-                if(plo->getRelatedCLOs()[i]->getID() == cloID)
+                if (plo->getRelatedCLOs()[i]->getID() == cloID)
                 {
                     plo->addCLO(plo->getRelatedCLOs()[i]);
                 }
             }
             break;
-            }
-            default:
-            cout<<"Invalid option selected. Please try again!"<<endl;
+        }
+        default:
+            cout << "Invalid option selected. Please try again!" << endl;
         }
     }
 
     void manageCLO(CLO *clo)
     {
-        cout<<"What would you like to do with the CLO?"<<endl;
-        cout<<"1. Update Description"<<endl;
-        cout<<"2. Add Topic"<<endl;
-        cout<<"3. Update Topic"<<endl;
-        cout<<"4. Remove Topic"<<endl;
+        cout << "What would you like to do with the CLO?" << endl;
+        cout << "1. Update Description" << endl;
+        cout << "2. Add Topic" << endl;
+        cout << "3. Update Topic" << endl;
+        cout << "4. Remove Topic" << endl;
         int option;
         string newDescription;
         string topic;
-        cin >> option;
-        switch(option)
+        std::cin >> option;
+        switch (option)
         {
-            case 1:
-            cout<<"Enter the new description for the CLO"<<endl;
-            cin >> newDescription;
+        case 1:
+            cout << "Enter the new description for the CLO" << endl;
+            std::cin >> newDescription;
             clo->updateDescription(newDescription);
             break;
-            case 2:
-            cout<<"Enter the topic you would like to add"<<endl;
-            cin >> topic;
+        case 2:
+            cout << "Enter the topic you would like to add" << endl;
+            std::cin >> topic;
             clo->addTopic(topic);
             break;
-            case 3:
-            cout<<"Enter the topic you would like to update"<<endl;
-            cin >> topic;
+        case 3:
+            cout << "Enter the topic you would like to update" << endl;
+            std::cin >> topic;
             clo->updateTopic(topic);
             break;
-            case 4:
-            cout<<"Enter the topic you would like to remove"<<endl;
-            cin >> topic;
+        case 4:
+            cout << "Enter the topic you would like to remove" << endl;
+            std::cin >> topic;
             clo->removeTopic(topic);
             break;
-            default:
-            cout<<"Invalid option selected. Please try again!"<<endl;
+        default:
+            cout << "Invalid option selected. Please try again!" << endl;
         }
     }
 };
@@ -801,98 +676,108 @@ public:
         evaluations.push_back(evaluation);
     }
 
-    void manageEvaluation(Evaluation *evaluation)
-    {
-        cout<<"What would you like to do with the evaluation?"<<endl;
-        cout<<"1. Update Evaluation"<<endl;
-        cout<<"2. Remove Evaluation"<<endl;
-        int option;
-        cin >> option;
-        switch(option)
-        {
-            case 1:
-            cout<<"What would you like to update?"<<endl;
-            cout<<"1. Question"<<endl;
-            cout<<"2. Marks"<<endl;
-            int option1;
-            string questionDescription;
-            cin >> option1;
-            switch(option1)
-            {
-                case 1:
-                cout<<"what would you like to change?"<<endl;
-                cout<<"1. Add Question"<<endl;
-                cout<<"2. Update Question"<<endl;
-                cout<<"3. Remove Question"<<endl;
-                int option2;
-                cin >> option2;
-                switch(option2)
-                {
-                    case 1:
-                    cout<<"Enter the question number"<<endl;
-                    int questionNumber;
-                    cin >> questionNumber;
-                    Question *question = new Question(questionNumber);
-                    cout<<"Enter the question description"<<endl;
-                    cin >> questionDescription;
-                    question->addDescription(questionDescription);
-                    evaluation->addQuestion(question);
-                    break;
-                    case 2:
-                    cout<<"Enter the question number you would like to update"<<endl;
-                    int questionNumber1;
-                    cin >> questionNumber1;
-                    for(int i=0;i<evaluation->getQuestions().size();i++)
-                    {
-                        if(evaluation->getQuestions()[i]->getNumber() == questionNumber1)
-                        {
-                            cout<<"Enter the new description for the question"<<endl;
-                            string newDescription;
-                            cin >> newDescription;
-                            evaluation->getQuestions()[i]->addDescription(newDescription);
-                        }
-                    }
-                    break;
-                    case 3:
-                    cout<<"Enter the question number you would like to remove"<<endl;
-                    int questionNumber2;
-                    cin >> questionNumber2;
-                    for(int i=0;i<evaluation->getQuestions().size();i++)
-                    {
-                        if(evaluation->getQuestions()[i]->getNumber() == questionNumber2)
-                        {
-                            evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
-                        }
-                    }
-                    break;
-                }
-                case 2:
-                cout<<"Enter the new marks for the evaluation"<<endl;
-                float newMarks;
-                cin >> newMarks;
-                evaluation->setMarks(newMarks);
-                break;
-                default:
-                cout<<"Invalid option selected. Please try again!"<<endl;
-    }
-    }
-    }
+    //  void manageEvaluation(Evaluation *evaluation)
+    //  {
+    //      cout << "What would you like to do with the evaluation?" << endl;
+    //      cout << "1. Update Evaluation" << endl;
+    //      cout << "2. Remove Evaluation" << endl;
+    //      int option;
+    //      std::cin >> option;
+    //      switch (option)
+    //      {
+    //      case 1:
+    //          cout << "What would you like to update?" << endl;
+    //          cout << "1. Question" << endl;
+    //          cout << "2. Marks" << endl;
+    //          int option1;
+    //          string questionDescription;
+    //          std::cin >> option1;
+    //          switch (option1)
+    //          {
+    //          case 1:
+    //              cout << "what would you like to change?" << endl;
+    //              cout << "1. Add Question" << endl;
+    //              cout << "2. Update Question" << endl;
+    //              cout << "3. Remove Question" << endl;
+    //              int option2;
+    //              std::cin >> option2;
+    //              switch (option2)
+    //              {
+    //              case 1:
+    //              {
+    //                  cout << "Enter the question number" << endl;
+    //                  int questionNumber;
+    //                  std::cin >> questionNumber;
+    //                  Question *question = new Question(questionNumber);
+    //                  cout << "Enter the question description" << endl;
+    //                  std::cin >> questionDescription;
+    //                  question->addDescription(questionDescription);
+    //                  evaluation->addQuestion(question);
+    //                  break;
+    //              }
+    //              case 2:
+    //              {
+    //                  cout << "Enter the question number you would like to update" << endl;
+    //                  int questionNumber1;
+    //                  std::cin >> questionNumber1;
+    //                  for (int i = 0; i < evaluation->getQuestions().size(); i++)
+    //                  {
+    //                      if (evaluation->getQuestions()[i]->getNumber() == questionNumber1)
+    //                      {
+    //                          cout << "Enter the new description for the question" << endl;
+    //                          string newDescription;
+    //                          std::cin >> newDescription;
+    //                          evaluation->getQuestions()[i]->addDescription(newDescription);
+    //                      }
+    //                  }
+    //                  break;
+    //              }
+    //              case 3:
+    //              {
+    //                  cout << "Enter the question number you would like to remove" << endl;
+    //                  int questionNumber2;
+    //                  std::cin >> questionNumber2;
+    //                  for (int i = 0; i < evaluation->getQuestions().size(); i++)
+    //                  {
+    //                      if (evaluation->getQuestions()[i]->getNumber() == questionNumber2)
+    //                      {
+    //                          evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
+    //                      }
+    //                  }
+    //                  break;
+    //              }
+    //              }
+    //              case 2:
+    //              {
+    //                  cout << "Enter the new marks for the evaluation" << endl;
+    //                  float newMarks;
+    //                  std::cin >> newMarks;
+    //                  evaluation->setMarks(newMarks);
+    //                  break;
+    //              }
+    //              default:
+    //              {
+    //                  cout << "Invalid option selected. Please try again!" << endl;
+    //              }
+    //              }
+    //          }
+    //      }
     void updateMarks(Evaluation *evaluation)
     {
-        cout<<"Enter the new marks for the evaluation"<<endl;
+        cout << "Enter the new marks for the evaluation" << endl;
         float newMarks;
-        cin >> newMarks;
+        std::cin >> newMarks;
         evaluation->setMarks(newMarks);
     }
-
 };
 
 class Report
 {
 private:
-int id;
-string semester;
-Program *program;
+    int id;
+    string semester;
+    Program *program;
+
 public:
     void CLOTested(CLO *clo)
     {
@@ -936,43 +821,41 @@ public:
 
     void manageProgram()
     {
-        cout<<"What would you like to do with the program?"<<endl;
-        cout<<"1. Add Program"<<endl;
-        cout<<"2. Remove Program"<<endl;
-        cout<<"3. Update Program"<<endl;
+        cout << "What would you like to do with the program?" << endl;
+        cout << "1. Add Program" << endl;
+        cout << "2. Remove Program" << endl;
+        cout << "3. Update Program" << endl;
         int option;
-        cin >> option;
+        std::cin >> option;
         switch (option)
         {
-            case 1:
-            {
-                cout<<"Enter the program ID"<<endl;
-                int programID;
-                cin >> programID;
-                cout<<"Enter the program name"<<endl;
-                string programName;
-                cin >> programName;
-                Program *program = new Program(programID, programName);
-                addProgram(program);
-                break;
-            }
-            case 2:
-            {
-                cout<<"Enter the program ID you would like to remove"<<endl;
-                int programID;
-                cin >> programID;
-                for(int i=0;i<programs.size();i++)
-                {
-                    if(programs[i]->getProgramID() == programID)
-                    {
-                        removeProgram(programs[i]);
-                    }
-                }
-                break;
-            }
-
+        case 1:
+        {
+            cout << "Enter the program ID" << endl;
+            int programID;
+            std::cin >> programID;
+            cout << "Enter the program name" << endl;
+            string programName;
+            std::cin >> programName;
+            Program *program = new Program(programID, programName);
+            addProgram(program);
+            break;
         }
-
+        case 2:
+        {
+            cout << "Enter the program ID you would like to remove" << endl;
+            int programID;
+            std::cin >> programID;
+            for (int i = 0; i < programs.size(); i++)
+            {
+                if (programs[i]->getProgramID() == programID)
+                {
+                    removeProgram(programs[i]);
+                }
+            }
+            break;
+        }
+        }
     }
 
     void addUser(User *user)
@@ -997,61 +880,218 @@ public:
 
     void manageUser()
     {
-        cout<<"What would you like to do with the user?"<<endl;
-        cout<<"1. Add User"<<endl;
-        cout<<"2. Remove User"<<endl;
-        cout<<"3. Append User"<<endl;
+        cout << "What would you like to do with the user?" << endl;
+        cout << "1. Add User" << endl;
+        cout << "2. Remove User" << endl;
+        cout << "3. Append User" << endl;
         int option;
-        cin >> option;
+        std::cin >> option;
         switch (option)
         {
+        case 1:
+        {
+            cout << "Enter the user ID" << endl;
+            int userID;
+            std::cin >> userID;
+            cout << "Enter the user name" << endl;
+            string userName;
+            std::cin >> userName;
+            User *user = new User(userName, userID);
+            addUser(user);
+            break;
+        }
+        case 2:
+        {
+            cout << "Enter the user ID you would like to remove" << endl;
+            int userID;
+            std::cin >> userID;
+            for (int i = 0; i < users.size(); i++)
+            {
+                if (users[i]->getID() == userID)
+                {
+                    removeUser(users[i]);
+                }
+            }
+            break;
+        }
+        case 3:
+        {
+            cout << "Enter the user ID you would like to append" << endl;
+            int userID;
+            std::cin >> userID;
+            for (int i = 0; i < users.size(); i++)
+            {
+                if (users[i]->getID() == userID)
+                {
+                    cout << "Enter the new name for the user" << endl;
+                    string newName;
+                    std::cin >> newName;
+                    users[i]->setName(newName);
+                }
+            }
+            break;
+        }
+        }
+    }
+};
+
+void Course::updateEvaluation(Evaluation *evaluation)
+{
+    for (int i = 0; i < evaluations.size(); i++)
+    {
+        if (evaluations[i] == evaluation)
+        {
+            cout << "Which attribute of the evaluation would you like to change?" << endl;
+            cout << "1. Question" << endl;
+            cout << "2. Marks" << endl;
+            int option;
+            string questionDescription;
+            std::cin >> option;
+            switch (option)
+            {
             case 1:
             {
-                cout<<"Enter the user ID"<<endl;
-                int userID;
-                cin >> userID;
-                cout<<"Enter the user name"<<endl;
-                string userName;
-                cin >> userName;
-                User *user = new User(userName, userID);
-                addUser(user);
-                break;
-            }
+                cout << "what would you like to change?" << endl;
+                cout << "1. Add Question" << endl;
+                cout << "2. Update Question" << endl;
+                cout << "3. Remove Question" << endl;
+                int option1;
+                std::cin >> option1;
+                switch (option1)
+                {
+                case 1:
+                {
+                    cout << "Enter the question number" << endl;
+                    int questionNumber;
+                    std::cin >> questionNumber;
+                    Question *question = new Question(questionNumber);
+                    cout << "Enter the question description" << endl;
+                    std::cin >> questionDescription;
+                    question->addDescription(questionDescription);
+                    evaluation->addQuestion(question);
+                    break;
+                }
+                case 2:
+                {
+                    cout << "Enter the question number you would like to update" << endl;
+                    int questionNumber1;
+                    std::cin >> questionNumber1;
+                    for (int i = 0; i < evaluation->getQuestions().size(); i++)
+                    {
+                        if (evaluation->getQuestions()[i]->getNumber() == questionNumber1)
+                        {
+                            cout << "Enter the new description for the question" << endl;
+                            string newDescription;
+                            std::cin >> newDescription;
+                            evaluation->getQuestions()[i]->addDescription(newDescription);
+                        }
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    cout << "Enter the question number you would like to remove" << endl;
+                    int questionNumber2;
+                    std::cin >> questionNumber2;
+                    for (int i = 0; i < evaluation->getQuestions().size(); i++)
+                    {
+                        if (evaluation->getQuestions()[i]->getNumber() == questionNumber2)
+                        {
+                            evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
+                        }
+                    }
+                    break;
+                }
+                }
             case 2:
             {
-                cout<<"Enter the user ID you would like to remove"<<endl;
-                int userID;
-                cin >> userID;
-                for(int i=0;i<users.size();i++)
-                {
-                    if(users[i]->getID() == userID)
-                    {
-                        removeUser(users[i]);
-                    }
-                }
+                cout << "Enter the new marks for the evaluation" << endl;
+                float newMarks;
+                std::cin >> newMarks;
+                evaluation->setMarks(newMarks);
                 break;
             }
-            case 3:
+            default:
             {
-                cout<<"Enter the user ID you would like to append"<<endl;
-                int userID;
-                cin >> userID;
-                for(int i=0;i<users.size();i++)
-                {
-                    if(users[i]->getID() == userID)
-                    {
-                        cout<<"Enter the new name for the user"<<endl;
-                        string newName;
-                        cin >> newName;
-                        users[i]->setName(newName);
-                    }
-                }
-                break;
-
+                cout << "Invalid option selected. Please try again!" << endl;
+            }
+            }
+            }
         }
     }
 }
-};
+
+void Course::updateCLO(CLO *clo)
+{
+    cout << "What would you like to update?" << endl;
+    cout << "1. Description" << endl;
+    cout << "2. Related PLOs" << endl;
+    string newDescription;
+    int option;
+    std::cin >> option;
+    switch (option)
+    {
+    case 1:
+        cout << "Enter the new description for the CLO" << endl;
+        std::cin >> newDescription;
+        clo->updateDescription(newDescription);
+        break;
+    case 2:
+        cout << "Enter the PLO ID you would like to add" << endl;
+        int ploID;
+        std::cin >> ploID;
+        for (int i = 0; i < clo->getRelatedPLOs().size(); i++)
+        {
+            if (clo->getRelatedPLOs()[i]->getID() == ploID)
+            {
+                clo->addRelatedPLO(clo->getRelatedPLOs()[i]);
+            }
+        }
+        break;
+    default:
+        cout << "Invalid option selected. Please try again!" << endl;
+    }
+}
+
+void Evaluation::updateQuestion(Question *question)
+{
+    cout << "what would you like to update?" << endl;
+    cout << "1. Description" << endl;
+    cout << "2. Related CLOs" << endl;
+    int option;
+    string newDescription;
+    std::cin >> option;
+    switch (option)
+    {
+    case 1:
+        cout << "Enter the new description for the question" << endl;
+        std::cin >> newDescription;
+        for (int i = 0; i < questions.size(); i++)
+        {
+            if (questions[i] == question)
+            {
+                questions[i]->setDescription(newDescription);
+            }
+        }
+    case 2:
+        cout << "Enter the CLO ID you would like to add" << endl;
+        int cloID;
+        std::cin >> cloID;
+        for (int i = 0; i < questions.size(); i++)
+        {
+            if (questions[i] == question)
+            {
+                for (int j = 0; j < relatedCLOs.size(); j++)
+                {
+                    if (relatedCLOs[j]->getID() == cloID)
+                    {
+                        questions[i]->addRelatedCLO(relatedCLOs[j]);
+                    }
+                }
+            }
+        }
+    }
+}
 
 // void ProgramsInterface()
 // {
@@ -1072,7 +1112,7 @@ public:
 //     cout << "Welcome to Our Outcome Based Education Support System" << endl;
 //     cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
 //     char selection;
-//     cin >> selection;
+//     std::cin >> selection;
 //     if (selection == 't')
 //     {
 //         cout << "Welcome Teacher!" << endl;
@@ -1093,7 +1133,7 @@ public:
 //         cout << "2. Manage Courses" << endl;
 //         cout << "3. Generate Report" << endl;
 //         cout << "0. Exit" << endl;
-//         cin >> option;
+//         std::cin >> option;
 //         switch (option)
 //         {
 //         case 1:
