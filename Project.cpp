@@ -198,13 +198,13 @@ public:
         return CLOs;
     }
 
-    // ~Course()
-    // {
-    //     for (int i = 0; i < CLOs.size(); i++)
-    //     {
-    //         delete CLOs[i];
-    //     }
-    // }
+    ~Course()
+    {
+        for (int i = 0; i < CLOs.size(); i++)
+        {
+            delete CLOs[i];
+        }
+    }
 };
 
 void Program::listCourses()
@@ -676,92 +676,92 @@ public:
         evaluations.push_back(evaluation);
     }
 
-    //  void manageEvaluation(Evaluation *evaluation)
-    //  {
-    //      cout << "What would you like to do with the evaluation?" << endl;
-    //      cout << "1. Update Evaluation" << endl;
-    //      cout << "2. Remove Evaluation" << endl;
-    //      int option;
-    //      std::cin >> option;
-    //      switch (option)
-    //      {
-    //      case 1:
-    //          cout << "What would you like to update?" << endl;
-    //          cout << "1. Question" << endl;
-    //          cout << "2. Marks" << endl;
-    //          int option1;
-    //          string questionDescription;
-    //          std::cin >> option1;
-    //          switch (option1)
-    //          {
-    //          case 1:
-    //              cout << "what would you like to change?" << endl;
-    //              cout << "1. Add Question" << endl;
-    //              cout << "2. Update Question" << endl;
-    //              cout << "3. Remove Question" << endl;
-    //              int option2;
-    //              std::cin >> option2;
-    //              switch (option2)
-    //              {
-    //              case 1:
-    //              {
-    //                  cout << "Enter the question number" << endl;
-    //                  int questionNumber;
-    //                  std::cin >> questionNumber;
-    //                  Question *question = new Question(questionNumber);
-    //                  cout << "Enter the question description" << endl;
-    //                  std::cin >> questionDescription;
-    //                  question->addDescription(questionDescription);
-    //                  evaluation->addQuestion(question);
-    //                  break;
-    //              }
-    //              case 2:
-    //              {
-    //                  cout << "Enter the question number you would like to update" << endl;
-    //                  int questionNumber1;
-    //                  std::cin >> questionNumber1;
-    //                  for (int i = 0; i < evaluation->getQuestions().size(); i++)
-    //                  {
-    //                      if (evaluation->getQuestions()[i]->getNumber() == questionNumber1)
-    //                      {
-    //                          cout << "Enter the new description for the question" << endl;
-    //                          string newDescription;
-    //                          std::cin >> newDescription;
-    //                          evaluation->getQuestions()[i]->addDescription(newDescription);
-    //                      }
-    //                  }
-    //                  break;
-    //              }
-    //              case 3:
-    //              {
-    //                  cout << "Enter the question number you would like to remove" << endl;
-    //                  int questionNumber2;
-    //                  std::cin >> questionNumber2;
-    //                  for (int i = 0; i < evaluation->getQuestions().size(); i++)
-    //                  {
-    //                      if (evaluation->getQuestions()[i]->getNumber() == questionNumber2)
-    //                      {
-    //                          evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
-    //                      }
-    //                  }
-    //                  break;
-    //              }
-    //              }
-    //              case 2:
-    //              {
-    //                  cout << "Enter the new marks for the evaluation" << endl;
-    //                  float newMarks;
-    //                  std::cin >> newMarks;
-    //                  evaluation->setMarks(newMarks);
-    //                  break;
-    //              }
-    //              default:
-    //              {
-    //                  cout << "Invalid option selected. Please try again!" << endl;
-    //              }
-    //              }
-    //          }
-    //      }
+     void manageEvaluation(Evaluation *evaluation)
+    {
+         cout << "What would you like to do with the evaluation?" << endl;
+         cout << "1. Update Evaluation" << endl;
+         cout << "2. Remove Evaluation" << endl;
+         int option;
+         std::cin >> option;
+         switch (option)
+         {
+         case 1:
+             cout << "What would you like to update?" << endl;
+             cout << "1. Question" << endl;
+             cout << "2. Marks" << endl;
+             int option1;
+             string questionDescription;
+             std::cin >> option1;
+             switch (option1)
+             {
+             case 1:
+                 cout << "what would you like to change?" << endl;
+                 cout << "1. Add Question" << endl;
+                 cout << "2. Update Question" << endl;
+                 cout << "3. Remove Question" << endl;
+                 int option2;
+                 std::cin >> option2;
+                 switch (option2)
+                 {
+                 case 1:
+                 {
+                     cout << "Enter the question number" << endl;
+                     int questionNumber;
+                     std::cin >> questionNumber;
+                     Question *question = new Question(questionNumber);
+                     cout << "Enter the question description" << endl;
+                     std::cin >> questionDescription;
+                     question->addDescription(questionDescription);
+                     evaluation->addQuestion(question);
+                     break;
+                 }
+                 case 2:
+                 {
+                     cout << "Enter the question number you would like to update" << endl;
+                     int questionNumber1;
+                     std::cin >> questionNumber1;
+                     for (int i = 0; i < evaluation->getQuestions().size(); i++)
+                     {
+                         if (evaluation->getQuestions()[i]->getNumber() == questionNumber1)
+                         {
+                             cout << "Enter the new description for the question" << endl;
+                             string newDescription;
+                             std::cin >> newDescription;
+                             evaluation->getQuestions()[i]->addDescription(newDescription);
+                         }
+                     }
+                     break;
+                 }
+                 case 3:
+                 {
+                     cout << "Enter the question number you would like to remove" << endl;
+                     int questionNumber2;
+                     std::cin >> questionNumber2;
+                     for (int i = 0; i < evaluation->getQuestions().size(); i++)
+                     {
+                         if (evaluation->getQuestions()[i]->getNumber() == questionNumber2)
+                         {
+                             evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
+                         }
+                     }
+                     break;
+                 }
+                 }
+                 case 2:
+                 {
+                     cout << "Enter the new marks for the evaluation" << endl;
+                     float newMarks;
+                     std::cin >> newMarks;
+                     evaluation->setMarks(newMarks);
+                     break;
+                 }
+                 default:
+                 {
+                     cout << "Invalid option selected. Please try again!" << endl;
+                 }
+                 }
+             }
+         }
     void updateMarks(Evaluation *evaluation)
     {
         cout << "Enter the new marks for the evaluation" << endl;
@@ -1093,62 +1093,62 @@ void Evaluation::updateQuestion(Question *question)
     }
 }
 
-// void ProgramsInterface()
-// {
-//     // Option to add, remove, and update programs
-//     // Show a list and details of current program(s)
-// }
+void ProgramsInterface()
+{
+    // Option to add, remove, and update programs
+    // Show a list and details of current program(s)
+}
 
-// void CoursesInterface()
-// {
-// }
+void CoursesInterface()
+{
+}
 
-// void GenerateReport()
-// {
-// }
+void GenerateReport()
+{
+}
 
-// int main()
-// {
-//     cout << "Welcome to Our Outcome Based Education Support System" << endl;
-//     cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
-//     char selection;
-//     std::cin >> selection;
-//     if (selection == 't')
-//     {
-//         cout << "Welcome Teacher!" << endl;
-//     }
-//     if (selection == 'a')
-//     {
-//         cout << "Welcome Academic Officer!" << endl;
-//     }
-//     else
-//     {
-//         cout << "Invalid user role. Only Teachers and Academic Officers are allowed."<<endl;
-//     }
-//     int option;
-//     while (option != 0)
-//     {
-//         cout << "What would you like to do today?" << endl;
-//         cout << "1. Manage Programs" << endl;
-//         cout << "2. Manage Courses" << endl;
-//         cout << "3. Generate Report" << endl;
-//         cout << "0. Exit" << endl;
-//         std::cin >> option;
-//         switch (option)
-//         {
-//         case 1:
-//             ProgramsInterface();
-//         case 2:
-//             CoursesInterface();
-//         case 3:
-//             GenerateReport();
-//         case 0:
-//             option = 0;
-//             cout << "Exiting..." << endl;
-//             break;
-//         default:
-//             cout << "Invalid option selected. Please try again!" << endl;
-//         }
-//     }
-//     return 0;
-// }
+int main()
+{
+    cout << "Welcome to Our Outcome Based Education Support System" << endl;
+    cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
+    char selection;
+    std::cin >> selection;
+    if (selection == 't')
+    {
+        cout << "Welcome Teacher!" << endl;
+    }
+    if (selection == 'a')
+    {
+        cout << "Welcome Academic Officer!" << endl;
+    }
+    else
+    {
+        cout << "Invalid user role. Only Teachers and Academic Officers are allowed."<<endl;
+    }
+    int option;
+    while (option != 0)
+    {
+        cout << "What would you like to do today?" << endl;
+        cout << "1. Manage Programs" << endl;
+        cout << "2. Manage Courses" << endl;
+        cout << "3. Generate Report" << endl;
+        cout << "0. Exit" << endl;
+        std::cin >> option;
+        switch (option)
+        {
+        case 1:
+            ProgramsInterface();
+        case 2:
+            CoursesInterface();
+        case 3:
+            GenerateReport();
+        case 0:
+            option = 0;
+            cout << "Exiting..." << endl;
+            break;
+        default:
+            cout << "Invalid option selected. Please try again!" << endl;
+        }
+    }
+    return 0;
+}
