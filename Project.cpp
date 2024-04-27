@@ -34,7 +34,22 @@ public:
         ID = programID;
         name = programName;
     }
-
+    int getProgramID()
+    {
+        return ID;
+    }
+    string getProgramName()
+    {
+        return name;
+    }
+    vector<Course *> getCourses()
+    {
+        return courses;
+    }
+    vector<PLO *> getPLOs()
+    {
+        return PLOs;
+    }
     void addCourse(Course *course)
     {
         courses.push_back(course);
@@ -54,16 +69,6 @@ public:
                 ++it;
             }
         }
-    }
-
-    vector<Course *> getCourses()
-    {
-        return courses;
-    }
-
-    vector<PLO *> getPLOs()
-    {
-        return PLOs;
     }
 
     void setProgramName(string programName)
@@ -89,7 +94,7 @@ public:
     {
         for(int i=0;i<courses.size();i++)
         {
-            cout << courses[i]->getCourseID() << " " << courses[i]->getCourseName() << endl;           
+            cout << courses[i]->getCourseID() << " " << courses[i]->getCourseName()<< endl;           
         }
     }
 };
@@ -581,6 +586,30 @@ public:
         name = userName;
         ID = userID;
     }
+    string getName()
+    {
+        return name;
+    }
+    int getID()
+    {
+        return ID;
+    }
+    string getPassword()
+    {
+        return password;
+    }
+    void setName(string userName)
+    {
+        name = userName;
+    }
+    void setID(int userID)
+    {
+        ID = userID;
+    }
+    void setPassword(string userPassword)
+    {
+        password = userPassword;
+    }
 };
 
 class AcademicOfficer : public User
@@ -885,88 +914,201 @@ private:
     vector<Program *> programs;
 
 public:
-    void addProgram()
+    void addProgram(Program *pr)
     {
+        programs.push_back(pr);
     }
 
-    void removeProgram()
+    void removeProgram(Program *pr)
     {
+        for (auto it = programs.begin(); it != programs.end();)
+        {
+            if (*it == pr)
+            {
+                it = programs.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     void manageProgram()
     {
+        cout<<"What would you like to do with the program?"<<endl;
+        cout<<"1. Add Program"<<endl;
+        cout<<"2. Remove Program"<<endl;
+        cout<<"3. Update Program"<<endl;
+        int option;
+        cin >> option;
+        switch (option)
+        {
+            case 1:
+            {
+                cout<<"Enter the program ID"<<endl;
+                int programID;
+                cin >> programID;
+                cout<<"Enter the program name"<<endl;
+                string programName;
+                cin >> programName;
+                Program *program = new Program(programID, programName);
+                addProgram(program);
+                break;
+            }
+            case 2:
+            {
+                cout<<"Enter the program ID you would like to remove"<<endl;
+                int programID;
+                cin >> programID;
+                for(int i=0;i<programs.size();i++)
+                {
+                    if(programs[i]->getProgramID() == programID)
+                    {
+                        removeProgram(programs[i]);
+                    }
+                }
+                break;
+            }
+
+        }
+
     }
 
-    void addUser()
+    void addUser(User *user)
     {
+        users.push_back(user);
     }
 
-    void removeUser()
+    void removeUser(User *user)
     {
+        for (auto it = users.begin(); it != users.end();)
+        {
+            if (*it == user)
+            {
+                it = users.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     void manageUser()
     {
-    }
-};
-
-void ProgramsInterface()
-{
-    // Option to add, remove, and update programs
-    // Show a list and details of current program(s)
-}
-
-void CoursesInterface()
-{
-}
-
-void GenerateReport()
-{
-}
-
-int main()
-{
-    cout << "Welcome to Our Outcome Based Education Support System" << endl;
-    cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
-    char selection;
-    cin >> selection;
-    if (selection == 't')
-    {
-        cout << "Welcome Teacher!" << endl;
-    }
-    if (selection == 'a')
-    {
-        cout << "Welcome Academic Officer!" << endl;
-    }
-    else
-    {
-        cout << "Invalid user role. Only Teachers and Academic Officers are allowed."<<endl;
-    }
-    int option;
-    while (option != 0)
-    {
-        cout << "What would you like to do today?" << endl;
-        cout << "1. Manage Programs" << endl;
-        cout << "2. Manage Courses" << endl;
-        cout << "3. Generate Report" << endl;
-        cout << "0. Exit" << endl;
+        cout<<"What would you like to do with the user?"<<endl;
+        cout<<"1. Add User"<<endl;
+        cout<<"2. Remove User"<<endl;
+        cout<<"3. Append User"<<endl;
+        int option;
         cin >> option;
         switch (option)
         {
-        case 1:
-            ProgramsInterface();
-        case 2:
-            CoursesInterface();
-        case 3:
-            GenerateReport();
-        case 0:
-            option = 0;
-            cout << "Exiting..." << endl;
-            break;
-        default:
-            cout << "Invalid option selected. Please try again!" << endl;
+            case 1:
+            {
+                cout<<"Enter the user ID"<<endl;
+                int userID;
+                cin >> userID;
+                cout<<"Enter the user name"<<endl;
+                string userName;
+                cin >> userName;
+                User *user = new User(userName, userID);
+                addUser(user);
+                break;
+            }
+            case 2:
+            {
+                cout<<"Enter the user ID you would like to remove"<<endl;
+                int userID;
+                cin >> userID;
+                for(int i=0;i<users.size();i++)
+                {
+                    if(users[i]->getID() == userID)
+                    {
+                        removeUser(users[i]);
+                    }
+                }
+                break;
+            }
+            case 3:
+            {
+                cout<<"Enter the user ID you would like to append"<<endl;
+                int userID;
+                cin >> userID;
+                for(int i=0;i<users.size();i++)
+                {
+                    if(users[i]->getID() == userID)
+                    {
+                        cout<<"Enter the new name for the user"<<endl;
+                        string newName;
+                        cin >> newName;
+                        users[i]->setName(newName);
+                    }
+                }
+                break;
+
         }
     }
-
-    return 0;
 }
+};
+
+// void ProgramsInterface()
+// {
+//     // Option to add, remove, and update programs
+//     // Show a list and details of current program(s)
+// }
+
+// void CoursesInterface()
+// {
+// }
+
+// void GenerateReport()
+// {
+// }
+
+// int main()
+// {
+//     cout << "Welcome to Our Outcome Based Education Support System" << endl;
+//     cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
+//     char selection;
+//     cin >> selection;
+//     if (selection == 't')
+//     {
+//         cout << "Welcome Teacher!" << endl;
+//     }
+//     if (selection == 'a')
+//     {
+//         cout << "Welcome Academic Officer!" << endl;
+//     }
+//     else
+//     {
+//         cout << "Invalid user role. Only Teachers and Academic Officers are allowed."<<endl;
+//     }
+//     int option;
+//     while (option != 0)
+//     {
+//         cout << "What would you like to do today?" << endl;
+//         cout << "1. Manage Programs" << endl;
+//         cout << "2. Manage Courses" << endl;
+//         cout << "3. Generate Report" << endl;
+//         cout << "0. Exit" << endl;
+//         cin >> option;
+//         switch (option)
+//         {
+//         case 1:
+//             ProgramsInterface();
+//         case 2:
+//             CoursesInterface();
+//         case 3:
+//             GenerateReport();
+//         case 0:
+//             option = 0;
+//             cout << "Exiting..." << endl;
+//             break;
+//         default:
+//             cout << "Invalid option selected. Please try again!" << endl;
+//         }
+//     }
+//     return 0;
+// }
