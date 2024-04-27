@@ -9,7 +9,6 @@
 
 using namespace std;
 
-class Course;
 class PLO;
 class CLO;
 class Evaluation;
@@ -19,6 +18,8 @@ class AcademicOfficer;
 class Teacher;
 class Report;
 class OBESupportSystem;
+class Course;
+
 
 class Program
 {
@@ -79,14 +80,14 @@ public:
         ID = programID;
     }
 
-    void setCourses(vector<Course *> courses)
+    void setCourses(Course * cr)
     {
-        this->courses = courses;
+        courses.push_back(cr);
     }
 
-    void setPlOs(vector<PLO *> PLOs)
+    void setPlOs(PLO *plos)
     {
-        this->PLOs = PLOs;
+        PLOs.push_back(plos);
     }
 
     void listCourses();
