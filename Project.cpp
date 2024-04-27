@@ -18,6 +18,7 @@ class User;
 class AcademicOfficer;
 class Teacher;
 class Report;
+class OBESupportSystem;
 
 class Program
 {
@@ -39,48 +40,6 @@ public:
         courses.push_back(course);
     }
 
-    // void updateCourse(Course *course)
-    // {
-    //     for (int i = 0; i < courses.size(); i++)
-    //     {
-    //         if (courses[i]->getCourseID() == course->getCourseID())
-    //         {
-    //             cout << "Which attribute would you like to update? enter valid number" << endl;
-    //             cout << "1. Name" << endl;
-    //             cout << "2. Description" << endl;
-    //             cout << "3. Edit CLO" << endl;
-    //             int option;
-    //             cin >> option;
-    //             int exit = 0;
-    //             while (exit == 0)
-    //             {
-    //                 switch (option)
-    //                 {
-    //                 case 1:
-    //                 {
-    //                     cout << "What would you like to change the name to?" << endl;
-    //                     string courseName;
-    //                     cin >> courseName;
-    //                     course->setName(courseName);
-    //                     break;
-    //                 }
-    //                 case 2:
-    //                 {
-    //                     cout << "What would you like to update the description to?" << endl;
-    //                     string courseDescription;
-    //                     cin >> courseDescription;
-    //                     course->setDescription(courseDescription);
-    //                     break;
-    //                 }
-    //                 default:
-    //                     cout << "The option you have selected is invalid." << endl;
-    //                     exit = 1;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
     void removeCourse(Course *course)
     {
@@ -107,6 +66,25 @@ public:
         return PLOs;
     }
 
+    void setProgramName(string programName)
+    {
+        name = programName;
+    }
+    void setProgramID(int programID)
+    {
+        ID = programID;
+    }
+
+    void setCourses(vector<Course *> courses)
+    {
+        this->courses = courses;
+    }
+
+    void setPlOs(vector<PLO *> PLOs)
+    {
+        this->PLOs = PLOs;
+    }
+
     void listCourses()
     {
         for(int i=0;i<courses.size();i++)
@@ -115,7 +93,6 @@ public:
         }
     }
 };
-
 class Course
 {
 private:
@@ -141,6 +118,14 @@ public:
     {
         description = courseDescription;
     }
+    void setCourseID(int courseID)
+    {
+        ID = courseID;
+    }
+    void setCourseName(string courseName)
+    {
+        name = courseName;
+    }
 
     int getCourseID()
     {
@@ -152,6 +137,15 @@ public:
         return name;
     }
 
+    vector<Evaluation *> getEvaluations()
+    {
+        return evaluations;
+    }
+
+    vector<CLO *> getCLOs()
+    {
+        return CLOs;
+    }
     void addCLO(CLO *clo)
     {
         CLOs.push_back(clo);
@@ -159,10 +153,34 @@ public:
 
     void updateCLO(CLO *clo)
     {
-        cout << "Please enter the description for this CLO ID: " << clo->getID() << endl;
-        string cloDescription;
-        cin >> cloDescription;
-        clo->updateDescription(cloDescription);
+        cout<<"What would you like to update?"<<endl;
+        cout<<"1. Description"<<endl;
+        cout<<"2. Related PLOs"<<endl;
+        string newDescription;
+        int option;
+        cin >> option;
+        switch(option)
+        {
+            case 1:
+            cout<<"Enter the new description for the CLO"<<endl;
+            cin >> newDescription;
+            clo->updateDescription(newDescription);
+            break;
+            case 2:
+            cout<<"Enter the PLO ID you would like to add"<<endl;
+            int ploID;
+            cin >> ploID;
+            for(int i=0;i<clo->getRelatedPLOs().size();i++)
+            {
+                if(clo->getRelatedPLOs()[i]->getID() == ploID)
+                {
+                    clo->addRelatedPLO(clo->getRelatedPLOs()[i]);
+                }
+            }
+            break;
+            default:
+            cout<<"Invalid option selected. Please try again!"<<endl;
+        }
     }
 
     void removeCLO(CLO *clo)
@@ -187,10 +205,91 @@ public:
 
     void updateEvaluation(Evaluation *evaluation)
     {
+        for(int i=0;i<evaluations.size();i++)
+        {
+            if(evaluations[i] == evaluation)
+            {
+                cout<<"Which attribute of the evaluation would you like to change?"<<endl;
+                cout<<"1. Question"<<endl;
+                cout<<"2. Marks"<<endl;
+                int option;
+                string questionDescription;
+                cin >> option;
+                switch(option)
+                {
+                    case 1:
+                    cout<<"what would you like to change?"<<endl;
+                    cout<<"1. Add Question"<<endl;
+                    cout<<"2. Update Question"<<endl;
+                    cout<<"3. Remove Question"<<endl;
+                    int option1;
+                    cin >> option1;
+                    switch(option1)
+                    {
+                        case 1:
+                        cout<<"Enter the question number"<<endl;
+                        int questionNumber;
+                        cin >> questionNumber;
+                        Question *question = new Question(questionNumber);
+                        cout<<"Enter the question description"<<endl;
+                        cin >> questionDescription;
+                        question->addDescription(questionDescription);
+                        evaluation->addQuestion(question);
+                        break;
+                        case 2:
+                        cout<<"Enter the question number you would like to update"<<endl;
+                        int questionNumber1;
+                        cin >> questionNumber1;
+                        for(int i=0;i<evaluation->getQuestions().size();i++)
+                        {
+                            if(evaluation->getQuestions()[i]->getNumber() == questionNumber1)
+                            {
+                                cout<<"Enter the new description for the question"<<endl;
+                                string newDescription;
+                                cin >> newDescription;
+                                evaluation->getQuestions()[i]->addDescription(newDescription);
+                            }
+                        }
+                        break;
+                        case 3:
+                        cout<<"Enter the question number you would like to remove"<<endl;
+                        int questionNumber2;
+                        cin >> questionNumber2;
+                        for(int i=0;i<evaluation->getQuestions().size();i++)
+                        {
+                            if(evaluation->getQuestions()[i]->getNumber() == questionNumber2)
+                            {
+                                evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
+                            }
+                        }
+                        break;
+                    }
+                    case 2:
+                    cout<<"Enter the new marks for the evaluation"<<endl;
+                    float newMarks;
+                    cin >> newMarks;
+                    evaluation->setMarks(newMarks);
+                    break;
+                    default:
+                    cout<<"Invalid option selected. Please try again!"<<endl;
+                }   
+            }
+    }
     }
 
     void removeEvaluation(Evaluation *evaluation)
     {
+        for (auto it = evaluations.begin(); it != evaluations.end();)
+        {
+            if (*it == evaluation)
+            {
+                it = evaluations.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     void updateDescription(string newDescription)
@@ -205,6 +304,10 @@ public:
 
     ~Course()
     {
+        for (int i = 0; i < CLOs.size(); i++)
+        {
+            delete CLOs[i];
+        }
     }
 };
 
@@ -214,6 +317,7 @@ class PLO
 private:
     int ID;
     string description;
+    vector<CLO *> relatedCLOs;
 
 public:
     PLO(int ploID)
@@ -225,6 +329,10 @@ public:
     {
         return ID;
     }
+    vector<CLO*> getRelatedCLOs()
+    {
+        return relatedCLOs;
+    }
 
     void updateDescription(string cloDescription)
     {
@@ -233,6 +341,7 @@ public:
 
     void addCLO(CLO *clo)
     {
+        relatedCLOs.push_back(clo);
     }
 };
 
@@ -255,6 +364,10 @@ public:
     {
         return ID;
     }
+    vector<PLO *> getRelatedPLOs()
+    {
+        return relatedPLOs;
+    }
 
     void updateDescription(string description)
     {
@@ -271,12 +384,33 @@ public:
         topics.push_back(topic);
     }
 
-    void updateTopic()
+    void updateTopic(string topic)
     {
+        for (int i = 0; i < topics.size(); i++)
+        {
+            if (topics[i] == topic)
+            {
+                cout << "Enter the new topic" << endl;
+                string newTopic;
+                cin >> newTopic;
+                topics[i] = newTopic;
+            }
+        }
     }
 
     void removeTopic(string topic)
     {
+        for (auto it = topics.begin(); it != topics.end();)
+        {
+            if (*it == topic)
+            {
+                it = topics.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 };
 
@@ -295,6 +429,26 @@ public:
         type = evaluationType;
         ID = evaluationID;
     }
+    string getType()
+    {
+        return type;
+    }
+    int getID()
+    {
+        return ID;
+    }
+    float getMarks()
+    {
+        return marks;
+    }
+    vector<CLO *> getRelatedCLOs()
+    {
+        return relatedCLOs;
+    }
+    vector<Question *> getQuestions()
+    {
+        return questions;
+    }
     void addQuestion(Question *question)
     {
         questions.push_back(question);
@@ -302,10 +456,60 @@ public:
 
     void updateQuestion(Question *question)
     {
+        cout<<"what would you like to update?"<<endl;
+        cout<<"1. Description"<<endl;
+        cout<<"2. Related CLOs"<<endl;
+        int option;
+        string newDescription;
+        cin >> option;
+        switch(option)
+        {
+            case 1:
+            cout<<"Enter the new description for the question"<<endl;
+            cin >> newDescription;
+            for(int i=0;i<questions.size();i++)
+            {
+                if(questions[i] == question)
+                {
+                    questions[i]->setDescription(newDescription);
+                }
+                
+            }
+            case 2:
+            cout<<"Enter the CLO ID you would like to add"<<endl;
+            int cloID;
+            cin >> cloID;
+            for(int i=0;i<questions.size();i++)
+            {
+                if(questions[i] == question)
+                {
+                    for(int j=0;j<relatedCLOs.size();j++)
+                    {
+                        if(relatedCLOs[j]->getID() == cloID)
+                        {
+                            questions[i]->addRelatedCLO(relatedCLOs[j]);
+                        }
+                    }
+                }
+            }
+
+
+        }
     }
 
     void removeQuestion(Question *question)
     {
+        for (auto it = questions.begin(); it != questions.end();)
+        {
+            if (*it == question)
+            {
+                it = questions.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
     }
 
     vector<Question *> getQuestions()
@@ -336,7 +540,22 @@ public:
     {
         this->number = number;
     }
-
+    int getNumber()
+    {
+        return number;
+    }
+    string getDescription()
+    {
+        return description;
+    }
+    vector<CLO *> getRelatedCLOs()
+    {
+        return relatedCLOs;
+    }
+    void setDescription(string questionDescription)
+    {
+        description = questionDescription;
+    }
     void addDescription(string questionDescription)
     {
         description = questionDescription;
@@ -354,6 +573,7 @@ private:
     string name;
     int ID;
     string password;
+    OBESupportSystem *system;
 
 public:
     User(string userName, int userID)
@@ -366,25 +586,166 @@ public:
 class AcademicOfficer : public User
 {
 private:
+Program *pr;
 public:
     AcademicOfficer(string officerName, int officerID) : User(officerName, officerID)
     {
+        officerName = officerName;
+        officerID = officerID;
     }
 
     void manageProgram(Program *program)
     {
+        cout<<"What would you like to do with the program?"<<endl;
+        cout<<"1. Add Course"<<endl;
+        cout<<"2. Remove Course"<<endl;
+        cout<<"3. delete Program"<<endl;
+        int option;
+        cin >> option;
+        int courseID;
+        string courseName;
+        switch(option)
+        {
+            case 1:
+                cout<<"Enter the course ID"<<endl;
+                cin >> courseID;
+                cout<<"Enter the course name"<<endl;
+                cin >> courseName;
+                Course *course = new Course(courseID, courseName);
+                program->addCourse(course);
+                break;
+            case 2:
+                cout<<"Enter the course ID you would like to remove"<<endl;
+                cin >> courseID;
+                for(int i=0;i<program->getCourses().size();i++)
+                {
+                    if(program->getCourses()[i]->getCourseID() == courseID)
+                    {
+                        program->removeCourse(program->getCourses()[i]);
+                    }
+                }
+                break;
+            case 3:
+                delete program;
+                break;
+            default:
+                cout<<"Invalid option selected. Please try again!"<<endl;
+        }
     }
 
     void manageCourse(Course *course)
     {
+        cout<<"What would you like to do with the course?"<<endl;
+        cout<<"1. Update Course"<<endl;
+        cout<<"2. Remove Course"<<endl;
+        int option;
+        int option1;
+        string newName;
+        string newDescription;
+        cin >> option;
+        switch(option)
+        {
+            case 1:
+                cout<<"What would you like to update?"<<endl;
+                cout<<"1. Name"<<endl;
+                cout<<"2. Description"<<endl;
+                cin >> option1;
+                switch(option1)
+                {
+                    case 1:
+                    cout<<"Enter the new name for the course"<<endl;
+                    cin >> newName;
+                    course->setName(newName);
+                    break;
+                    case 2:
+                    cout<<"Enter the new description for the course"<<endl;
+                    cin >> newDescription;
+                    course->setDescription(newDescription);
+                    break;
+                    default:
+                    cout<<"Invalid option selected. Please try again!"<<endl;
+                }
+                break;
+            case 2:
+                delete course;
+                break;
+            default:
+                cout<<"Invalid option selected. Please try again!"<<endl;
+        }
     }
 
     void managePLO(PLO *plo)
     {
+        cout<<"What would you like to do with the PLO?"<<endl;
+        cout<<"1. Update Description"<<endl;
+        cout<<"2. Add CLO"<<endl;
+        int option;
+        string newDescription;
+        cin >> option;
+        switch(option)
+        {
+            case 1:
+            {
+            cout<<"Enter the new description for the PLO"<<endl;
+            cin >> newDescription;
+            plo->updateDescription(newDescription);
+            break;
+            }
+            case 2:
+            {
+            cout<<"Enter the CLO ID you would like to add"<<endl;
+            int cloID;
+            cin >> cloID;
+            for(int i=0;i<plo->getRelatedCLOs().size();i++)
+            {
+                if(plo->getRelatedCLOs()[i]->getID() == cloID)
+                {
+                    plo->addCLO(plo->getRelatedCLOs()[i]);
+                }
+            }
+            break;
+            }
+            default:
+            cout<<"Invalid option selected. Please try again!"<<endl;
+        }
     }
 
     void manageCLO(CLO *clo)
     {
+        cout<<"What would you like to do with the CLO?"<<endl;
+        cout<<"1. Update Description"<<endl;
+        cout<<"2. Add Topic"<<endl;
+        cout<<"3. Update Topic"<<endl;
+        cout<<"4. Remove Topic"<<endl;
+        int option;
+        string newDescription;
+        string topic;
+        cin >> option;
+        switch(option)
+        {
+            case 1:
+            cout<<"Enter the new description for the CLO"<<endl;
+            cin >> newDescription;
+            clo->updateDescription(newDescription);
+            break;
+            case 2:
+            cout<<"Enter the topic you would like to add"<<endl;
+            cin >> topic;
+            clo->addTopic(topic);
+            break;
+            case 3:
+            cout<<"Enter the topic you would like to update"<<endl;
+            cin >> topic;
+            clo->updateTopic(topic);
+            break;
+            case 4:
+            cout<<"Enter the topic you would like to remove"<<endl;
+            cin >> topic;
+            clo->removeTopic(topic);
+            break;
+            default:
+            cout<<"Invalid option selected. Please try again!"<<endl;
+        }
     }
 };
 
@@ -397,6 +758,8 @@ private:
 public:
     Teacher(string teacherName, int teacherID) : User(teacherName, teacherID)
     {
+        teacherName = teacherName;
+        teacherID = teacherID;
     }
 
     void addTaughtCourse(Course *course)
@@ -411,24 +774,96 @@ public:
 
     void manageEvaluation(Evaluation *evaluation)
     {
+        cout<<"What would you like to do with the evaluation?"<<endl;
+        cout<<"1. Update Evaluation"<<endl;
+        cout<<"2. Remove Evaluation"<<endl;
+        int option;
+        cin >> option;
+        switch(option)
+        {
+            case 1:
+            cout<<"What would you like to update?"<<endl;
+            cout<<"1. Question"<<endl;
+            cout<<"2. Marks"<<endl;
+            int option1;
+            string questionDescription;
+            cin >> option1;
+            switch(option1)
+            {
+                case 1:
+                cout<<"what would you like to change?"<<endl;
+                cout<<"1. Add Question"<<endl;
+                cout<<"2. Update Question"<<endl;
+                cout<<"3. Remove Question"<<endl;
+                int option2;
+                cin >> option2;
+                switch(option2)
+                {
+                    case 1:
+                    cout<<"Enter the question number"<<endl;
+                    int questionNumber;
+                    cin >> questionNumber;
+                    Question *question = new Question(questionNumber);
+                    cout<<"Enter the question description"<<endl;
+                    cin >> questionDescription;
+                    question->addDescription(questionDescription);
+                    evaluation->addQuestion(question);
+                    break;
+                    case 2:
+                    cout<<"Enter the question number you would like to update"<<endl;
+                    int questionNumber1;
+                    cin >> questionNumber1;
+                    for(int i=0;i<evaluation->getQuestions().size();i++)
+                    {
+                        if(evaluation->getQuestions()[i]->getNumber() == questionNumber1)
+                        {
+                            cout<<"Enter the new description for the question"<<endl;
+                            string newDescription;
+                            cin >> newDescription;
+                            evaluation->getQuestions()[i]->addDescription(newDescription);
+                        }
+                    }
+                    break;
+                    case 3:
+                    cout<<"Enter the question number you would like to remove"<<endl;
+                    int questionNumber2;
+                    cin >> questionNumber2;
+                    for(int i=0;i<evaluation->getQuestions().size();i++)
+                    {
+                        if(evaluation->getQuestions()[i]->getNumber() == questionNumber2)
+                        {
+                            evaluation->getQuestions().erase(evaluation->getQuestions().begin() + i);
+                        }
+                    }
+                    break;
+                }
+                case 2:
+                cout<<"Enter the new marks for the evaluation"<<endl;
+                float newMarks;
+                cin >> newMarks;
+                evaluation->setMarks(newMarks);
+                break;
+                default:
+                cout<<"Invalid option selected. Please try again!"<<endl;
+    }
+    }
+    }
+    void updateMarks(Evaluation *evaluation)
+    {
+        cout<<"Enter the new marks for the evaluation"<<endl;
+        float newMarks;
+        cin >> newMarks;
+        evaluation->setMarks(newMarks);
     }
 
-    void manageMarks(float marks)
-    {
-    }
-
-    void addTeacher()
-    {
-    }
-
-    void removeTeacher()
-    {
-    }
 };
 
 class Report
 {
 private:
+int id;
+string semester;
+Program *program;
 public:
     void CLOTested(CLO *clo)
     {
@@ -443,10 +878,11 @@ public:
     }
 };
 
-void OBESupportSystem()
+class OBESupportSystem
 {
 private:
     vector<User *> users;
+    vector<Program *> programs;
 
 public:
     void addProgram()
@@ -472,7 +908,7 @@ public:
     void manageUser()
     {
     }
-}
+};
 
 void ProgramsInterface()
 {
@@ -496,13 +932,15 @@ int main()
     cin >> selection;
     if (selection == 't')
     {
-        else if (selection == 'a')
-        {
-        }
-        else
-        {
-            cout << "Invalid user role. Only Teachers and Academic Officers are allowed."
-        }
+        cout << "Welcome Teacher!" << endl;
+    }
+    if (selection == 'a')
+    {
+        cout << "Welcome Academic Officer!" << endl;
+    }
+    else
+    {
+        cout << "Invalid user role. Only Teachers and Academic Officers are allowed."<<endl;
     }
     int option;
     while (option != 0)
