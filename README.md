@@ -9,8 +9,8 @@ Programming Language: C++
 Compiler: Clang & g++
 
 Libraries:
-<iostream>
-<fstream>
-<string>
-<vector>
-<sstream>
+iostream
+fstream
+string
+vector
+sstream
