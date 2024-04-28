@@ -36,6 +36,7 @@
 # Others
 *.json
 *.DS_Store
+*.vscode
 
 # Build Directory
 build/
