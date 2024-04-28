@@ -1,19 +1,68 @@
-#include<header.h>
+#include "header.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+using namespace std;
 void ProgramsInterface(OBESupportSystem system)
 {
     // Option to add, remove, and update programs
     // Show a list and details of current program(s)
+    cout<<"Programs"<<endl;
     system.listPrograms();
     system.manageProgram();
+    cout<<"Programs"<<endl;
     system.listPrograms();
 }
 
-void CoursesInterface()
+void CoursesInterface(Program *pr)
 {
+    // Option to add, remove, and update courses
+    // Show a list and details of current course(s)
+    pr->listCourses();
+    pr->manageProgram();
+    pr->listCourses();
 }
 
 void GenerateReport()
 {
+}
+
+
+void academicOfficerInterface(OBESupportSystem system)
+{
+        int option=1000;
+        while (option != 0)
+        {
+            cout << "What would you like to do today?" << endl;
+            cout << "1. Manage Programs" << endl;
+            cout << "2. Manage Courses" << endl;
+            cout << "3. Generate Report" << endl;
+            cout << "0. Exit" << endl;
+            std::cin >> option;
+            switch (option)
+            {
+            case 1:
+                ProgramsInterface(system);
+                academicOfficerInterface(system);
+            case 2:
+                cout<<"Which Program's course(s) would you like to manage?"<<endl;
+                system.listPrograms();
+                int programID;
+                std::cin>>programID;
+                CoursesInterface(system.getProgram(programID));
+                academicOfficerInterface(system);
+            case 3:
+                GenerateReport();
+                academicOfficerInterface(system);
+            case 0:
+                cout << "Goodbye!" << endl;
+                break;
+            default:
+                cout << "Invalid option selected. Please try again!" << endl;
+            }
+        }
 }
 
 int main()
@@ -66,9 +115,9 @@ int main()
     course1->addEvaluation(evaluation1);
     course2->addEvaluation(evaluation2);
 
-    // Managing evaluations by teachers
-    teacher1->manageEvaluation(evaluation1);
-    teacher2->manageEvaluation(evaluation2);
+    // adding evaluations to teachers
+    teacher1->addEvaluation(evaluation1);
+    teacher2->addEvaluation(evaluation2);
 
     OBESupportSystem system;
     system.addUser(officer1);
@@ -90,31 +139,7 @@ int main()
     if (selection == 'a')
     {
         cout << "Welcome Academic Officer!" << endl;
-        int option=1;
-        while (option != 0)
-        {
-            cout << "What would you like to do today?" << endl;
-            cout << "1. Manage Programs" << endl;
-            cout << "2. Manage Courses" << endl;
-            cout << "3. Generate Report" << endl;
-            cout << "0. Exit" << endl;
-            std::cin >> option;
-            switch (option)
-            {
-            case 1:
-                ProgramsInterface(system);
-            case 2:
-                CoursesInterface();
-            case 3:
-                GenerateReport();
-            case 0:
-                option = 0;
-                cout << "Exiting..." << endl;
-                break;
-            default:
-                cout << "Invalid option selected. Please try again!" << endl;
-            }
-        }
+        academicOfficerInterface(system);
     }
     else
     {

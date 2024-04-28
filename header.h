@@ -8,6 +8,12 @@
 #include <vector>
 
 using namespace std;
+class Course;
+class PLO;
+class CLO;
+class Evaluation;
+class Question;
+class OBESupportSystem;
 class Program
 {
 private:
@@ -282,6 +288,8 @@ public:
     void addProgram(Program *pr);
 
     void removeProgram(Program *pr);
+
+    Program* getProgram(int id);
 
     void manageProgram();
 

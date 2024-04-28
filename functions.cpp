@@ -1,4 +1,10 @@
-#include <header.h>
+#include "header.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+using namespace std;
 
 Program ::Program(int programID, string programName)
 {
@@ -24,7 +30,7 @@ void Program::manageProgram()
         cout << "Enter the course name" << endl;
         std::cin >> courseName;
         Course *course = new Course(courseID, courseName);
-        addCourse(course);
+        courses.push_back(course);
         break;
     }
     case 2:
@@ -473,7 +479,7 @@ void Evaluation::removeQuestion(Question *question)
         }
     }
 }
-Question::Question(int number = 1)
+Question::Question(int number)
 {
     this->number = number;
 }
@@ -536,7 +542,7 @@ AcademicOfficer::AcademicOfficer(string officerName, int officerID) : User(offic
     officerName = officerName;
     officerID = officerID;
 }
-void AcademicOfficer::manageProgram(Program *program)
+void AcademicOfficer::manageProgram(Program *pro)
 {
     cout << "What would you like to do with the program?" << endl;
     cout << "1. Add Course" << endl;
@@ -555,25 +561,25 @@ void AcademicOfficer::manageProgram(Program *program)
         cout << "Enter the course name" << endl;
         std::cin >> courseName;
         Course *course = new Course(courseID, courseName);
-        program->addCourse(course);
+        pr->addCourse(course);
         break;
     }
     case 2:
     {
         cout << "Enter the course ID you would like to remove" << endl;
         std::cin >> courseID;
-        for (int i = 0; i < program->getCourses().size(); i++)
+        for (int i = 0; i < pro->getCourses().size(); i++)
         {
-            if (program->getCourses()[i]->getCourseID() == courseID)
+            if (pro->getCourses()[i]->getCourseID() == courseID)
             {
-                program->removeCourse(program->getCourses()[i]);
+                pro->removeCourse(pro->getCourses()[i]);
             }
         }
         break;
     }
     case 3:
     {
-        delete program;
+        delete pro;
         break;
     }
     default:
@@ -833,6 +839,16 @@ void OBESupportSystem::removeProgram(Program *pr)
         }
     }
 }
+Program *OBESupportSystem::getProgram(int programID)
+{
+    for (int i = 0; i < programs.size(); i++)
+    {
+        if (programs[i]->getProgramID() == programID)
+        {
+            return programs[i];
+        }
+    }
+}
 void OBESupportSystem::manageProgram()
 {
     cout << "What would you like to do with the program?" << endl;
@@ -851,8 +867,8 @@ void OBESupportSystem::manageProgram()
         cout << "Enter the program name" << endl;
         string programName;
         std::cin >> programName;
-        Program *program = new Program(programID, programName);
-        addProgram(program);
+        Program *pr=new Program(programID, programName);
+        programs.push_back(pr);
         break;
     }
     case 2:
@@ -875,7 +891,7 @@ void OBESupportSystem::listPrograms()
 {
     for (int i = 0; i < programs.size(); i++)
     {
-        cout <<i+1<<"."<< programs[i]->getProgramID() << " " << programs[i]->getProgramName() << endl;
+        cout << programs[i]->getProgramID() << " " << programs[i]->getProgramName() << endl;
     }
 }
 
