@@ -5,7 +5,7 @@
 #include <vector>
 
 using namespace std;
-void ProgramsInterface(OBESupportSystem system)
+void ProgramsInterface(OBESupportSystem &system)
 {
     // Option to add, remove, and update programs
     // Show a list and details of current program(s)
@@ -29,8 +29,60 @@ void GenerateReport()
 {
 }
 
+void taughtCoursesInterface(Teacher *teacher)
+{
+    // Option to add, remove, and update courses
+    // Show a list and details of current course(s)
+    cout<<"Courses Taught by "<<teacher->getName()<<":"<<endl;
+    teacher->listTaughtCourses();
+    cout<<"which course would you like to change?"<<endl;
+    int courseID;
+    std::cin>>courseID;
 
-void academicOfficerInterface(OBESupportSystem system)
+    cout<<"what would you like to do?"<<endl;
+    cout<<"1. Enter Topic(s) Covered"<<endl;
+    cout<<"2.Remove Topic(s) Covered"<<endl;
+    cout<<"0. Exit"<<endl;
+    int option;
+    std::cin>>option;
+    switch (option)
+    {
+        case 0:
+        {
+            cout<<"Goodbye!"<<endl;
+            break;
+        }
+        case 1:
+        {
+            cout<<"Enter Clo(s) covered in the class"<<endl;
+            teacher->listclosofCourse(courseID);
+            int cloID;
+            std::cin>>cloID;
+            cout << "Enter the topic(s) covered in the class" << endl;
+            string topics;
+            std::cin >> topics;
+            cout << "Topics covered: " << topics << endl;
+            teacher->addTopicsCovered(topics,cloID);
+            taughtCoursesInterface(teacher);
+        }
+        case 2:
+        {
+            cout<<"Enter Topic(s) To Remove"<<endl;
+            string topics;
+            std::cin>>topics;
+            teacher->removeTopicsCovered(topics);
+            taughtCoursesInterface(teacher);
+        }
+    
+    default:
+    cout<<"Invalid option selected. Please try again!"<<endl;
+    taughtCoursesInterface(teacher);
+    }
+
+    teacher->listTaughtCourses();
+}
+
+void academicOfficerInterface(OBESupportSystem &system)
 {
         int option=1000;
         while (option != 0)
@@ -63,6 +115,42 @@ void academicOfficerInterface(OBESupportSystem system)
                 cout << "Invalid option selected. Please try again!" << endl;
             }
         }
+}
+void teachersInterface(OBESupportSystem &system)
+{
+    int option=1000;
+    while (option != 0)
+    {
+        cout << "What would you like to do today?" << endl;
+        cout << "1. Enter Topic(s) Covered" << endl;
+        cout << "2. Enter Evaluation(s)" << endl;
+        cout << "0. Exit" << endl;
+        std::cin >> option;
+        switch (option)
+        {
+        case 1:
+        {
+            cout<<"which User are you?"<<endl;
+            system.listTeachers();
+            int userID;
+            std::cin>>userID;
+            User *user=system.getUser(userID);
+            Teacher *teacher=dynamic_cast<Teacher*>(user);
+            taughtCoursesInterface(teacher);
+
+        }
+        case 0:
+        {
+            cout << "Goodbye!" << endl;
+            break;
+        }
+        default:
+        {
+            cout << "Invalid option selected. Please try again!" << endl;
+            teachersInterface(system);
+        }
+        }
+    }
 }
 
 int main()
@@ -135,6 +223,7 @@ int main()
     if (selection == 't')
     {
         cout << "Welcome Teacher!" << endl;
+        teachersInterface(system);
     }
     if (selection == 'a')
     {

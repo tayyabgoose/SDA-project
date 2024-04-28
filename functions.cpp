@@ -19,14 +19,13 @@ void Program::manageProgram()
     cout << "3. delete Program" << endl;
     int option;
     std::cin >> option;
-    int courseID;
+    int courseID=courses.back()->getCourseID()+1;
     string courseName;
     switch (option)
     {
     case 1:
     {
-        cout << "Enter the course ID" << endl;
-        std::cin >> courseID;
+        cout << "course ID" << endl<<courseID<<endl;
         cout << "Enter the course name" << endl;
         std::cin >> courseName;
         Course *course = new Course(courseID, courseName);
@@ -352,6 +351,10 @@ vector<PLO *> CLO::getRelatedPLOs()
 {
     return relatedPLOs;
 }
+string CLO::getDescription()
+{
+    return description;
+}
 void CLO::updateDescription(string description)
 {
     this->description = description;
@@ -512,6 +515,7 @@ User::User(string userName, int userID)
     name = userName;
     ID = userID;
 }
+
 string User::getName()
 {
     return name;
@@ -519,6 +523,10 @@ string User::getName()
 int User::getID()
 {
     return ID;
+}
+
+void User::listTaughtCourses()
+{
 }
 string User::getPassword()
 {
@@ -536,18 +544,36 @@ void User::setPassword(string userPassword)
 {
     password = userPassword;
 }
+void User::setType(string userType)
+{
+    type = userType;
+}
+string User::getType()
+{
+    return type;
+}
 
 AcademicOfficer::AcademicOfficer(string officerName, int officerID) : User(officerName, officerID)
 {
     officerName = officerName;
     officerID = officerID;
+    setType("Academic Officer");
 }
-void AcademicOfficer::manageProgram(Program *pro)
+void AcademicOfficer::setType(string userType)
+{
+    User::setType("Academic Officer");
+}
+
+string AcademicOfficer::getType()
+{
+    return User::getType();
+}
+void AcademicOfficer::manageProgram(Program *program)
 {
     cout << "What would you like to do with the program?" << endl;
     cout << "1. Add Course" << endl;
     cout << "2. Remove Course" << endl;
-    cout << "3. delete Program" << endl;
+    cout << "3. Delete Program" << endl;
     int option;
     std::cin >> option;
     int courseID;
@@ -561,25 +587,25 @@ void AcademicOfficer::manageProgram(Program *pro)
         cout << "Enter the course name" << endl;
         std::cin >> courseName;
         Course *course = new Course(courseID, courseName);
-        pr->addCourse(course);
+        program->addCourse(course);
         break;
     }
     case 2:
     {
         cout << "Enter the course ID you would like to remove" << endl;
         std::cin >> courseID;
-        for (int i = 0; i < pro->getCourses().size(); i++)
+        for (int i = 0; i < program->getCourses().size(); i++)
         {
-            if (pro->getCourses()[i]->getCourseID() == courseID)
+            if (program->getCourses()[i]->getCourseID() == courseID)
             {
-                pro->removeCourse(pro->getCourses()[i]);
+                program->removeCourse(program->getCourses()[i]);
             }
         }
         break;
     }
     case 3:
     {
-        delete pro;
+        delete program;
         break;
     }
     default:
@@ -588,6 +614,7 @@ void AcademicOfficer::manageProgram(Program *pro)
     }
     }
 }
+
 void AcademicOfficer::manageCourse(Course *course)
 {
     cout << "What would you like to do with the course?" << endl;
@@ -659,9 +686,8 @@ void AcademicOfficer::managePLO(PLO *plo)
     }
     case 2:
     {
-        cout << "Enter the CLO ID you would like to add" << endl;
-        int cloID;
-        std::cin >> cloID;
+        int cloID=plo->getRelatedCLOs().back()->getID()+1;
+        cout << "CLO ID" <<endl<<cloID<< endl;
         for (int i = 0; i < plo->getRelatedCLOs().size(); i++)
         {
             if (plo->getRelatedCLOs()[i]->getID() == cloID)
@@ -718,10 +744,77 @@ Teacher::Teacher(string teacherName, int teacherID) : User(teacherName, teacherI
 {
     teacherName = teacherName;
     teacherID = teacherID;
+    setType("Teacher");
+}
+void Teacher::setType(string userType)
+{
+    User::setType("Teacher");
+}
+string Teacher::getType()
+{
+    return User::getType();
 }
 void Teacher::addTaughtCourse(Course *course)
 {
     taughtCourses.push_back(course);
+}
+void Teacher::removeTaughtCourse(Course *course)
+{
+    for (auto it = taughtCourses.begin(); it != taughtCourses.end();)
+    {
+        if (*it == course)
+        {
+            it = taughtCourses.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+void Teacher::listTaughtCourses()
+{
+    for (int i = 0; i < taughtCourses.size(); i++)
+    {
+        cout << taughtCourses[i]->getCourseID() << " " << taughtCourses[i]->getCourseName() << endl;
+    }
+}
+void Teacher:: addTopicsCovered(string topics,int cloID)
+{
+    for(int i=0;i<taughtCourses.size();i++)
+    {
+        for(int j=0;j<taughtCourses[i]->getCLOs().size();j++)
+        {
+            if(taughtCourses[i]->getCLOs()[j]->getID()==cloID)
+            {
+                taughtCourses[i]->getCLOs()[j]->addTopic(topics);
+            }
+        }
+    }
+}
+void Teacher::removeTopicsCovered(string topics)
+{
+    for(int i=0;i<taughtCourses.size();i++)
+    {
+        for(int j=0;j<taughtCourses[i]->getCLOs().size();j++)
+        {
+            taughtCourses[i]->getCLOs()[j]->removeTopic(topics);
+        }
+    }
+}
+
+void Teacher:: listclosofCourse(int courseID)
+{
+    for(int i=0;i<taughtCourses.size();i++)
+    {
+        if(taughtCourses[i]->getCourseID()==courseID)
+        {
+            for(int j=0;j<taughtCourses[i]->getCLOs().size();j++)
+            {
+                cout<<taughtCourses[i]->getCLOs()[j]->getID()<<" "<<taughtCourses[i]->getCLOs()[j]->getDescription()<<endl;
+            }
+        }
+    }
 }
 void Teacher::addEvaluation(Evaluation *evaluation)
 {
@@ -756,9 +849,8 @@ void Teacher::manageEvaluation(Evaluation *evaluation)
             {
             case 1:
             {
-                cout << "Enter the question number" << endl;
-                int questionNumber;
-                std::cin >> questionNumber;
+                int questionNumber=evaluation->getQuestions().back()->getNumber()+1;
+                cout << "question number" << endl<<questionNumber<<endl;
                 Question *question = new Question(questionNumber);
                 cout << "Enter the question description" << endl;
                 std::cin >> questionDescription;
@@ -849,6 +941,17 @@ Program *OBESupportSystem::getProgram(int programID)
         }
     }
 }
+User* OBESupportSystem::getUser(int id)
+{
+    for (int i = 0; i < users.size(); i++)
+    {
+        if (users[i]->getID() == id)
+        {
+            cout << users[i]->getName() << endl;
+            return users[i];
+        }
+    }
+}
 void OBESupportSystem::manageProgram()
 {
     cout << "What would you like to do with the program?" << endl;
@@ -861,14 +964,13 @@ void OBESupportSystem::manageProgram()
     {
     case 1:
     {
-        cout << "Enter the program ID" << endl;
-        int programID;
-        std::cin >> programID;
+        int programID=programs.back()->getProgramID()+1;
+        cout << "program ID" << endl<<programID<<endl;
         cout << "Enter the program name" << endl;
         string programName;
         std::cin >> programName;
-        Program *pr=new Program(programID, programName);
-        programs.push_back(pr);
+        Program *pr = new Program(programID, programName);
+        OBESupportSystem::addProgram(pr);
         break;
     }
     case 2:
@@ -885,6 +987,29 @@ void OBESupportSystem::manageProgram()
         }
         break;
     }
+    case 3:
+    {
+        cout << "Enter the program ID you would like to update" << endl;
+        int programID;
+        std::cin >> programID;
+        Program *program = getProgram(programID);
+        if (program != nullptr)
+        {
+            cout << "Enter the new program name" << endl;
+            string newProgramName;
+            std::cin >> newProgramName;
+            program->setProgramName(newProgramName);
+        }
+        else
+        {
+            cout << "Program not found!" << endl;
+        }
+        break;
+    }
+    default:
+    {
+        cout << "Invalid option selected. Please try again!" << endl;
+    }
     }
 }
 void OBESupportSystem::listPrograms()
@@ -898,6 +1023,16 @@ void OBESupportSystem::listPrograms()
 void OBESupportSystem::addUser(User *user)
 {
     users.push_back(user);
+}
+void OBESupportSystem::listTeachers()
+{
+    for (int i = 0; i < users.size(); i++)
+    {
+        if(users[i]->getType()=="Teacher")
+        {
+        cout << users[i]->getID() << " " << users[i]->getName() << endl;
+        }
+    }
 }
 void OBESupportSystem::removeUser(User *user)
 {
@@ -925,9 +1060,8 @@ void OBESupportSystem::manageUser()
     {
     case 1:
     {
-        cout << "Enter the user ID" << endl;
-        int userID;
-        std::cin >> userID;
+        int userID=users.back()->getID()+1;
+        cout << "Enter the user ID" << endl<<userID<<endl;
         cout << "Enter the user name" << endl;
         string userName;
         std::cin >> userName;

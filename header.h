@@ -130,7 +130,10 @@ public:
     CLO(int cloID);
 
     int getID();
+
     vector<PLO *> getRelatedPLOs();
+
+    string getDescription();
 
     void updateDescription(string description);
 
@@ -202,6 +205,7 @@ class User
 {
 private:
     string name;
+    string type;
     int ID;
     string password;
     OBESupportSystem *system;
@@ -211,7 +215,13 @@ public:
 
     string getName();
 
+    void setType(string userType);
+
+    string getType();
+
     int getID();
+
+    virtual void listTaughtCourses();
 
     string getPassword();
 
@@ -229,6 +239,10 @@ private:
 
 public:
     AcademicOfficer(string officerName, int officerID);
+
+    void setType(string type);
+
+    string getType();
 
     void manageProgram(Program *program);
 
@@ -248,7 +262,21 @@ private:
 public:
     Teacher(string teacherName, int teacherID);
 
+    void setType(string type);
+
+    string getType();
+
     void addTaughtCourse(Course *course);
+
+    void removeTaughtCourse(Course *course);
+
+    void addTopicsCovered(string topics,int cloID);
+
+    void removeTopicsCovered(string topics);
+
+    void listTaughtCourses();
+
+    void listclosofCourse(int courseID);
 
     void addEvaluation(Evaluation *evaluation);
 
@@ -289,11 +317,15 @@ public:
 
     void removeProgram(Program *pr);
 
+    User* getUser(int id);
+
     Program* getProgram(int id);
 
     void manageProgram();
 
     void listPrograms();
+
+    void listTeachers();
 
     void addUser(User *user);
 
