@@ -36,3 +36,6 @@
 # Others
 *.json
 *.DS_Store
+
+# Build Directory
+build/
