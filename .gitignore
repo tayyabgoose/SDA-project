@@ -40,3 +40,4 @@
 
 # Build Directory
 build/
+/.vscode
