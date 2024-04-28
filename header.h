@@ -1,6 +1,11 @@
 // Group Project
 // Software Design & Analysis
 // Muhammad Tayyab (21L-7686) & Tauqeer Ahson (21L-6036)
+// Libraries: iostream, fstream, string, vector, sstream
+// Language: C++
+// Compiler: g++
+// IDE: Visual Studio Code
+// Date: 28 April 2024
 
 #include <iostream>
 #include <fstream>
@@ -43,7 +48,7 @@ public:
 
     void setProgramID(int programID);
 
-    void setCourses(Course * cr);
+    void setCourses(Course *cr);
 
     void setPlOs(PLO *plos);
 
@@ -76,7 +81,7 @@ public:
     vector<Evaluation *> getEvaluations();
 
     vector<CLO *> getCLOs();
-    
+
     void addCLO(CLO *clo);
 
     void updateCLO(CLO *clo);
@@ -96,8 +101,6 @@ public:
     ~Course();
 };
 
-
-
 // PLO (Program Learning Outcome)
 class PLO
 {
@@ -107,7 +110,7 @@ private:
     vector<CLO *> relatedCLOs;
 
 public:
-    PLO(int ploID,string Description);
+    PLO(int ploID, string Description);
 
     int getID();
     vector<CLO *> getRelatedCLOs();
@@ -145,7 +148,6 @@ public:
 
     void removeTopic(string topic);
 };
-
 
 class Evaluation
 {
@@ -270,7 +272,7 @@ public:
 
     void removeTaughtCourse(Course *course);
 
-    void addTopicsCovered(string topics,int cloID);
+    void addTopicsCovered(string topics, int cloID);
 
     void removeTopicsCovered(string topics);
 
@@ -317,9 +319,9 @@ public:
 
     void removeProgram(Program *pr);
 
-    User* getUser(int id);
+    User *getUser(int id);
 
-    Program* getProgram(int id);
+    Program *getProgram(int id);
 
     void manageProgram();
 
