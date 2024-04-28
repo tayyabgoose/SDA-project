@@ -32,3 +32,7 @@
 *.app
 *.r
 *.p
+
+# Others
+*.json
+*.DS_Store
