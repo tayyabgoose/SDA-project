@@ -74,6 +74,9 @@ public:
 
     void setCourseName(string courseName);
 
+    //after submission of the project
+    void addTopicsCovered(string &topics,int &cloID);
+
     int getCourseID();
 
     string getCourseName();
@@ -93,6 +96,9 @@ public:
     void updateEvaluation(Evaluation *evaluation);
 
     void removeEvaluation(Evaluation *evaluation);
+
+    //after submission of the project
+    void listEvaluations();
 
     void updateDescription(string newDescription);
 
@@ -142,9 +148,12 @@ public:
 
     void addRelatedPLO(PLO *plo);
 
-    void addTopic(string topic);
+    void addTopic(string &topic);
 
     void updateTopic(string topic);
+
+    //after submission of the project
+    vector<string> getTopics();
 
     void removeTopic(string topic);
 };
@@ -159,19 +168,27 @@ private:
     vector<Question *> questions;
 
 public:
-    Evaluation(string evaluationType, int evaluationID);
+    Evaluation(string evaluationType);
 
     string getType();
 
     int getID();
+    //after submission of the project
+    void setEvaluationId();
 
     float getMarks();
 
     void setMarks(float evaluationMarks);
 
     vector<CLO *> getRelatedCLOs();
+    //after submission of the project
+    void addCLO(CLO *clo);
+    //after submission of the project
+    CLO* getCLO(int cloID);
 
     vector<Question *> getQuestions();
+    //after submission of the project
+    void getQuestionsDetails();
 
     void addQuestion(Question *question);
 
@@ -225,6 +242,14 @@ public:
 
     virtual void listTaughtCourses();
 
+    //after submission of the project
+    virtual void listclosofCourse(int courseID);
+    //after submission of the project
+    virtual Course* getTaughtCourse(int courseID);
+    //after submission of the project
+    virtual void addEvaluationDetails(Evaluation *evaluation);
+    //after submission of the project
+
     string getPassword();
 
     void setName(string userName);
@@ -270,13 +295,26 @@ public:
 
     void addTaughtCourse(Course *course);
 
-    void removeTaughtCourse(Course *course);
+    //after submission of the project
+    Course* getTaughtCourse(int courseID);
+    //after submission of the project
 
-    void addTopicsCovered(string topics, int cloID);
+    void removeTaughtCourse(Course *course);
 
     void removeTopicsCovered(string topics);
 
     void listTaughtCourses();
+
+    //after submission of the project
+    void listTopicsCovered(int courseId);
+    //after submission of the project
+    void listEvaluations(int CourseID);
+    //after submission of the project
+    void addEvaluationDetails(Evaluation *evaluation);
+    //after submission of the project
+    void viewEvaluationDetails();
+    //after submission of the project
+    // void addEvaluation(Evaluation *evaluation);
 
     void listclosofCourse(int courseID);
 
@@ -286,7 +324,6 @@ public:
 
     void updateMarks(Evaluation *evaluation);
 };
-
 class Report
 {
 private:
@@ -295,17 +332,15 @@ private:
     Program *program;
 
 public:
-    void CLOTested(CLO *clo)
-    {
-    }
-
-    void CLOsOfCourse(Course *course)
-    {
-    }
-
-    void PLOContainsCourses(PLO *plo)
-    {
-    }
+    Report();
+    void CLOTested(CLO *clo);
+    void CLOsOfCourse(Course *course);
+    void PLOContainsCourses(PLO *plo);
+//done after submission of the project
+    void setSemester(string sem);
+    void setProgram(int pId);
+    Program* getProgram();
+    string getSemester();
 };
 
 class OBESupportSystem

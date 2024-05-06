@@ -134,6 +134,15 @@ void Course::setCourseName(string courseName)
 {
     name = courseName;
 }
+void Course::addTopicsCovered(string &topics,int &cloID)
+{   for (int i = 0; i < CLOs.size(); i++)
+    {
+        if (CLOs[i]->getID() == cloID)
+        {
+            CLOs[i]->addTopic(topics);
+        }
+    }
+}
 int Course::getCourseID()
 {
     return ID;
@@ -303,6 +312,13 @@ void Course::removeEvaluation(Evaluation *evaluation)
         }
     }
 }
+void Course::listEvaluations()
+{
+    for (int i = 0; i < evaluations.size(); i++)
+    {
+        cout << evaluations[i]->getID() << " " << evaluations[i]->getType() << endl;
+    }
+}
 void Course::updateDescription(string newDescription)
 {
     description = newDescription;
@@ -355,6 +371,11 @@ string CLO::getDescription()
 {
     return description;
 }
+
+vector<string> CLO::getTopics()
+{
+    return topics;
+}
 void CLO::updateDescription(string description)
 {
     this->description = description;
@@ -363,8 +384,9 @@ void CLO::addRelatedPLO(PLO *plo)
 {
     relatedPLOs.push_back(plo);
 }
-void CLO::addTopic(string topic)
+void CLO::addTopic(string &topic)
 {
+    cout<<"Topic is "<<topic<<endl;
     topics.push_back(topic);
 }
 void CLO::updateTopic(string topic)
@@ -394,10 +416,10 @@ void CLO::removeTopic(string topic)
         }
     }
 }
-Evaluation::Evaluation(string evaluationType, int evaluationID)
+Evaluation::Evaluation(string evaluationType)
 {
     type = evaluationType;
-    ID = evaluationID;
+    setEvaluationId();
 }
 string Evaluation::getType()
 {
@@ -406,6 +428,11 @@ string Evaluation::getType()
 int Evaluation::getID()
 {
     return ID;
+}
+
+void Evaluation::setEvaluationId()
+{
+    ID = ID + 1;
 }
 float Evaluation::getMarks()
 {
@@ -423,9 +450,31 @@ vector<Question *> Evaluation::getQuestions()
 {
     return questions;
 }
+void Evaluation::getQuestionsDetails()
+{
+    for (int i = 0; i < questions.size(); i++)
+    {
+        cout << questions[i]->getNumber() << " " << questions[i]->getDescription() << endl;
+    }
+}
 void Evaluation::addQuestion(Question *question)
 {
     questions.push_back(question);
+}
+void Evaluation::addCLO(CLO *clo)
+{
+    relatedCLOs.push_back(clo);
+}
+CLO* Evaluation::getCLO(int cloid)
+{
+    for (int i = 0; i < relatedCLOs.size(); i++)
+    {
+        if (relatedCLOs[i]->getID() == cloid)
+        {
+            return relatedCLOs[i];
+        }
+    }
+    
 }
 void Evaluation::updateQuestion(Question *question)
 {
@@ -526,6 +575,15 @@ int User::getID()
 }
 
 void User::listTaughtCourses()
+{
+}
+void User::listclosofCourse(int courseID)
+{
+}
+Course* User::getTaughtCourse(int CLOId)
+{
+}
+void User::addEvaluationDetails(Evaluation *eval)
 {
 }
 string User::getPassword()
@@ -758,6 +816,16 @@ void Teacher::addTaughtCourse(Course *course)
 {
     taughtCourses.push_back(course);
 }
+Course* Teacher::getTaughtCourse(int courseID)
+{
+    for (int i = 0; i < taughtCourses.size(); i++)
+    {
+        if (taughtCourses[i]->getCourseID() == courseID)
+        {
+            return taughtCourses[i];
+        }
+    }
+}
 void Teacher::removeTaughtCourse(Course *course)
 {
     for (auto it = taughtCourses.begin(); it != taughtCourses.end();)
@@ -779,17 +847,52 @@ void Teacher::listTaughtCourses()
         cout << taughtCourses[i]->getCourseID() << " " << taughtCourses[i]->getCourseName() << endl;
     }
 }
-void Teacher:: addTopicsCovered(string topics,int cloID)
+void Teacher::listTopicsCovered(int CourseId)
 {
-    for(int i=0;i<taughtCourses.size();i++)
+    for (int i = 0; i < taughtCourses.size(); i++)
     {
-        for(int j=0;j<taughtCourses[i]->getCLOs().size();j++)
+        if (taughtCourses[i]->getCourseID() == CourseId)
         {
-            if(taughtCourses[i]->getCLOs()[j]->getID()==cloID)
+            vector<CLO *> CLOs = taughtCourses[i]->getCLOs(); // Get CLOs of the specific course
+            for (int j = 0; j < CLOs.size(); j++)
             {
-                taughtCourses[i]->getCLOs()[j]->addTopic(topics);
+                cout << CLOs[j]->getID() << " " << CLOs[j]->getDescription() << endl;
+                vector<string> topics = CLOs[j]->getTopics();
+                for (int k = 0; k < topics.size(); k++)
+                {
+                    cout << topics[k] << endl;
+                }
             }
+            return; // Exit loop after printing topics for the specified course
         }
+    }
+}
+void Teacher::listEvaluations(int courseID)
+{
+    for (int i = 0; i < taughtCourses.size(); i++)
+    {
+        if (taughtCourses[i]->getCourseID() == courseID)
+        {
+            vector<Evaluation*> evaluations = taughtCourses[i]->getEvaluations(); // Get evaluations of the specific course
+            for (int j = 0; j < evaluations.size(); j++)
+            {
+                cout << evaluations[j]->getID() << " " << evaluations[j]->getType() << endl;
+            }
+            return; // Exit loop after printing evaluations for the specified course
+        }
+    }
+}
+
+void Teacher::addEvaluationDetails(Evaluation *eval)
+{
+    evaluations.push_back(eval);
+}
+void Teacher::viewEvaluationDetails()
+{
+    for (int i = 0; i < evaluations.size(); i++)
+    {
+            cout << evaluations[i]->getType() << " " << evaluations[i]->getMarks() << endl;
+            evaluations[i]->getQuestionsDetails();
     }
 }
 void Teacher::removeTopicsCovered(string topics)
@@ -1101,4 +1204,39 @@ void OBESupportSystem::manageUser()
         break;
     }
     }
+}
+//done after submission of the project
+Report::Report()
+{
+    id=id+1;
+    cout<<"Enter the semester"<<endl;
+    string sem;
+    std::cin>>sem;
+    setSemester(sem);
+    cout<<"Enter the program ID"<<endl;
+    int programID;
+    std::cin>>programID;
+
+}
+void Report::setProgram(int PId)
+{
+    program->getProgramID();
+}
+void Report::setSemester(string sem)
+{
+    semester=sem;
+}
+Program* Report::getProgram()
+{
+    return program;
+}
+string Report::getSemester()
+{
+    return semester;
+}
+void Report::CLOTested(CLO *clo)
+{
+    getProgram();
+
+    clo->getTopics();
 }

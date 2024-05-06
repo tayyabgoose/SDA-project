@@ -33,15 +33,11 @@ void taughtCoursesInterface(Teacher *teacher)
 {
     // Option to add, remove, and update courses
     // Show a list and details of current course(s)
-    cout << "Courses Taught by " << teacher->getName() << ":" << endl;
-    teacher->listTaughtCourses();
-    cout << "which course would you like to change?" << endl;
-    int courseID;
-    std::cin >> courseID;
 
     cout << "what would you like to do?" << endl;
     cout << "1. Enter Topic(s) Covered" << endl;
     cout << "2.Remove Topic(s) Covered" << endl;
+    cout <<"3. View Topics(s) covered"<<endl;
     cout << "0. Exit" << endl;
     int option;
     std::cin >> option;
@@ -49,37 +45,141 @@ void taughtCoursesInterface(Teacher *teacher)
     {
     case 0:
     {
-        cout << "Goodbye!" << endl;
         break;
     }
     case 1:
     {
-        cout << "Enter Clo(s) covered in the class" << endl;
+        cout << "Courses Taught by " << teacher->getName() << ":" << endl;
+        teacher->listTaughtCourses();
+        cout << "which course would you like to add Topic?" << endl;
+        int courseID;
+        std::cin >> courseID;
+        cout << "CLo(s) In course" << endl;
         teacher->listclosofCourse(courseID);
+        cout << "Enter the CLO ID covered in class" << endl;
         int cloID;
         std::cin >> cloID;
         cout << "Enter the topic(s) covered in the class" << endl;
         string topics;
         std::cin >> topics;
         cout << "Topics covered: " << topics << endl;
-        teacher->addTopicsCovered(topics, cloID);
+        cout<<"Review Topics Covered"<<endl;
+        teacher->getTaughtCourse(courseID)->addTopicsCovered(topics,cloID);
         taughtCoursesInterface(teacher);
+        break;
     }
     case 2:
     {
+        cout << "Courses Taught by " << teacher->getName() << ":" << endl;
+        teacher->listTaughtCourses();
+        cout << "which course would you like to remove Topic?" << endl;
+        int courseID;
+        std::cin >> courseID;
         cout << "Enter Topic(s) To Remove" << endl;
         string topics;
         std::cin >> topics;
         teacher->removeTopicsCovered(topics);
         taughtCoursesInterface(teacher);
+        break;
+    }
+    case 3:
+    {
+        cout << "Courses Taught by " << teacher->getName() << ":" << endl;
+        teacher->listTaughtCourses();
+        cout << "which course would you like to view Topic(s)?" << endl;
+        int courseID;
+        std::cin >> courseID;
+        teacher->listTopicsCovered(courseID);
+        taughtCoursesInterface(teacher);
+        break;
     }
 
     default:
         cout << "Invalid option selected. Please try again!" << endl;
         taughtCoursesInterface(teacher);
+        break;
     }
 
     teacher->listTaughtCourses();
+}
+void EvaluationsInterface(Teacher *teacher)
+{
+    cout<<"1. Add evaluation to course"<<endl;
+    cout<<"2. view evaluations of course"<<endl;
+    cout<<"0. Exit"<<endl;
+    int option;
+    std::cin>>option;
+    switch(option)
+    {
+        case 0:
+        {
+            break;
+        }
+        case 1:
+        {
+            cout<<"which course would you like to add evaluation"<<endl;
+            teacher->listTaughtCourses();
+            int courseID;
+            std::cin>>courseID;
+            cout<<"Enter the evaluation name like Quiz,Assignment and etc."<<endl;
+            string evaluationName;
+            std::cin>>evaluationName;
+            Evaluation *evaluation=new Evaluation(evaluationName);
+            int cloID;
+            while(true)
+            {
+                cout<<"CLO(s) list to select from"<<endl;
+                teacher->listclosofCourse(courseID);
+                cout<<"Enter CLO(s) Id to test"<<endl;
+                std::cin>>cloID;
+                evaluation->addCLO(evaluation->getCLO(cloID));
+                cout<<"Do you want to add more CLO(s) to this evaluation? (y/n)"<<endl;
+                char choice;
+                std::cin>>choice;
+                if(choice=='n')
+                {
+                    break;
+                }
+            }
+            while(true)
+            {
+                cout<<"Enter Clos(s) for the related question"<<endl;
+                teacher->listclosofCourse(courseID);
+                cout<<"Enter CLO(s) Id to test"<<endl;
+                std::cin>>cloID;
+                CLO *clo= new CLO(cloID);
+                evaluation->addCLO(clo);
+                cout<<"Add question description"<<endl;
+                string question;
+                cin.ignore();
+                getline(cin,question);
+                Question *q=new Question();
+                q->setDescription(question);
+                q->addRelatedCLO(clo);
+                evaluation->addQuestion(q);
+                cout<<"Do you want to add more questions to this evaluation? (y/n)"<<endl;
+                char choice;
+                std::cin>>choice;
+                if(choice=='n')
+                {
+                    break;
+                }
+            }
+
+            teacher->getTaughtCourse(courseID)->addEvaluation(evaluation);
+            EvaluationsInterface(teacher);
+        }
+        case 2:
+        {
+            cout<<"which course would you like to view evaluation"<<endl;
+            teacher->listTaughtCourses();
+            int courseID;
+            std::cin>>courseID;
+            teacher->listEvaluations(courseID);
+            EvaluationsInterface(teacher);
+        }
+    }
+
 }
 
 void academicOfficerInterface(OBESupportSystem &system)
@@ -122,10 +222,11 @@ void teachersInterface(OBESupportSystem &system)
     while (option != 0)
     {
         cout << "What would you like to do today?" << endl;
-        cout << "1. Enter Topic(s) Covered" << endl;
-        cout << "2. Enter Evaluation(s)" << endl;
+        cout << "1. Manage Topic(s) Covered" << endl;
+        cout << "2. Manage Evaluation(s)" << endl;
         cout << "0. Exit" << endl;
         std::cin >> option;
+        string evaluationName;
         switch (option)
         {
         case 1:
@@ -134,9 +235,20 @@ void teachersInterface(OBESupportSystem &system)
             system.listTeachers();
             int userID;
             std::cin >> userID;
-            User *user = system.getUser(userID);
-            Teacher *teacher = dynamic_cast<Teacher *>(user);
+            Teacher *teacher=(Teacher*)system.getUser(userID);
             taughtCoursesInterface(teacher);
+            break;
+        }
+        //after submission of project
+        case 2:
+        {
+            cout << "which User are you?" << endl;
+            system.listTeachers();
+            int userID;
+            std::cin >> userID;
+            Teacher *teacher=(Teacher*)system.getUser(userID);
+            EvaluationsInterface(teacher);
+            break;
         }
         case 0:
         {
@@ -194,11 +306,11 @@ int main()
     teacher2->addTaughtCourse(course2);
 
     // Adding evaluations
-    Evaluation *evaluation1 = new Evaluation("Quiz", 1);
-    Evaluation *evaluation2 = new Evaluation("Assignment", 2);
+    Evaluation *evaluation1 = new Evaluation("Quiz");
+    Evaluation *evaluation2 = new Evaluation("Assignment");
 
     // Adding evaluations to courses
-    course1->addEvaluation(evaluation1);
+    //course1->addEvaluation(evaluation1);
     course2->addEvaluation(evaluation2);
 
     // adding evaluations to teachers
