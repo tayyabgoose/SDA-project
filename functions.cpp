@@ -416,10 +416,10 @@ void CLO::removeTopic(string topic)
         }
     }
 }
-Evaluation::Evaluation(string evaluationType)
+Evaluation::Evaluation(string evaluationType,int id)
 {
     type = evaluationType;
-    setEvaluationId();
+    ID = id;
 }
 string Evaluation::getType()
 {
@@ -1119,7 +1119,7 @@ void OBESupportSystem::listPrograms()
 {
     for (int i = 0; i < programs.size(); i++)
     {
-        cout << programs[i]->getProgramID() << " " << programs[i]->getProgramName() << endl;
+        cout << programs[i]->getProgramID() << " " << programs[i]->getProgramName()<< endl;
     }
 }
 

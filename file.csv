@@ -1,15 +1,14 @@
-Object Type,Object ID,Name,Program ID,Program Name,Course ID,Course Name,CLO ID,PLO ID,PLO Name,Academic Officer ID,Academic Officer Name,Teacher ID,Teacher Name,Evaluation Type
-Program,1,Software Engineering,,,,
-Program,2,Computer Science,,,,
-Course,101,Introduction to Programming,1,Software Engineering,,,
-Course,102,Software Design,1,Software Engineering,,,
-CLO,,,1,Problem Solving,,1,1,Problem Solving,,
-CLO,,,2,Teamwork,,2,2,Teamwork,,
-PLO,,,1,Problem Solving,,,
-PLO,,,2,Teamwork,,,
-Academic Officer,1,Muhammad Tayyab,,,,
-Academic Officer,2,Tauqeer Ahson,,,,
-Teacher,,,101,,101,John Doe,,,
-Teacher,,,102,,102,Jane Doe,,,
-Evaluation,,,,"Quiz",,,,
-Evaluation,,,,"Assignment",,,,
+Program,1,Software Engineering 
+Program,2,Computer Science 
+Course,101,Introduction to Programming,1
+Course,102,Software Design,1
+CLO,1,Teamwork,101
+CLO,2,Problem Solving,102
+PLO,1,Problem Solving,1
+PLO,2,Teamwork,2
+Academic Officer,1,Muhammad Tayyab
+Academic Officer,2,Tauqeer Ahson
+Teacher,101,John Doe,101
+Teacher,102,Jane Doe,102
+Evaluation,1,Quiz,101,101
+Evaluation,1,Assignment,102,102

@@ -168,7 +168,7 @@ private:
     vector<Question *> questions;
 
 public:
-    Evaluation(string evaluationType);
+    Evaluation(string evaluationType,int id);
 
     string getType();
 

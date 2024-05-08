@@ -3,8 +3,18 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <sstream>
 
 using namespace std;
+
+vector<Program*> programs;
+vector<Course*> courses;
+vector<CLO*> clos;
+vector<PLO*> plos;
+vector<Teacher*> teachers;
+vector<AcademicOfficer*> academicOfficers;
+vector<Evaluation*> evaluations;
+
 void ProgramsInterface(OBESupportSystem &system)
 {
     // Option to add, remove, and update programs
@@ -60,8 +70,9 @@ void taughtCoursesInterface(Teacher *teacher)
         int cloID;
         std::cin >> cloID;
         cout << "Enter the topic(s) covered in the class" << endl;
+        cin.ignore();
         string topics;
-        std::cin >> topics;
+        getline(cin, topics);
         cout << "Topics covered: " << topics << endl;
         cout<<"Review Topics Covered"<<endl;
         teacher->getTaughtCourse(courseID)->addTopicsCovered(topics,cloID);
@@ -76,8 +87,9 @@ void taughtCoursesInterface(Teacher *teacher)
         int courseID;
         std::cin >> courseID;
         cout << "Enter Topic(s) To Remove" << endl;
+        cin.ignore();
         string topics;
-        std::cin >> topics;
+        getline(cin, topics);
         teacher->removeTopicsCovered(topics);
         taughtCoursesInterface(teacher);
         break;
@@ -102,6 +114,7 @@ void taughtCoursesInterface(Teacher *teacher)
 
     teacher->listTaughtCourses();
 }
+
 void EvaluationsInterface(Teacher *teacher)
 {
     cout<<"1. Add evaluation to course"<<endl;
@@ -124,7 +137,8 @@ void EvaluationsInterface(Teacher *teacher)
             cout<<"Enter the evaluation name like Quiz,Assignment and etc."<<endl;
             string evaluationName;
             std::cin>>evaluationName;
-            Evaluation *evaluation=new Evaluation(evaluationName);
+            int e_id=evaluations.size()+1;
+            Evaluation *evaluation=new Evaluation(evaluationName,e_id);
             int cloID;
             while(true)
             {
@@ -150,8 +164,8 @@ void EvaluationsInterface(Teacher *teacher)
                 CLO *clo= new CLO(cloID);
                 evaluation->addCLO(clo);
                 cout<<"Add question description"<<endl;
-                string question;
                 cin.ignore();
+                string question;
                 getline(cin,question);
                 Question *q=new Question();
                 q->setDescription(question);
@@ -168,6 +182,7 @@ void EvaluationsInterface(Teacher *teacher)
 
             teacher->getTaughtCourse(courseID)->addEvaluation(evaluation);
             EvaluationsInterface(teacher);
+            break;
         }
         case 2:
         {
@@ -177,6 +192,7 @@ void EvaluationsInterface(Teacher *teacher)
             std::cin>>courseID;
             teacher->listEvaluations(courseID);
             EvaluationsInterface(teacher);
+            break;
         }
     }
 
@@ -198,6 +214,7 @@ void academicOfficerInterface(OBESupportSystem &system)
         case 1:
             ProgramsInterface(system);
             academicOfficerInterface(system);
+            break;
         case 2:
             cout << "Which Program's course(s) would you like to manage?" << endl;
             system.listPrograms();
@@ -205,9 +222,11 @@ void academicOfficerInterface(OBESupportSystem &system)
             std::cin >> programID;
             CoursesInterface(system.getProgram(programID));
             academicOfficerInterface(system);
+            break;
         case 3:
             GenerateReport();
             academicOfficerInterface(system);
+            break;
         case 0:
             cout << "Goodbye!" << endl;
             break;
@@ -216,6 +235,7 @@ void academicOfficerInterface(OBESupportSystem &system)
         }
     }
 }
+
 void teachersInterface(OBESupportSystem &system)
 {
     int option = 1000;
@@ -226,7 +246,6 @@ void teachersInterface(OBESupportSystem &system)
         cout << "2. Manage Evaluation(s)" << endl;
         cout << "0. Exit" << endl;
         std::cin >> option;
-        string evaluationName;
         switch (option)
         {
         case 1:
@@ -235,96 +254,384 @@ void teachersInterface(OBESupportSystem &system)
             system.listTeachers();
             int userID;
             std::cin >> userID;
-            Teacher *teacher=(Teacher*)system.getUser(userID);
-            taughtCoursesInterface(teacher);
+            Teacher *teacher = dynamic_cast<Teacher*>(system.getUser(userID));
+            if (teacher) {
+                taughtCoursesInterface(teacher);
+            } else {
+                cout << "Invalid User ID!" << endl;
+            }
             break;
         }
-        //after submission of project
         case 2:
         {
             cout << "which User are you?" << endl;
             system.listTeachers();
             int userID;
             std::cin >> userID;
-            Teacher *teacher=(Teacher*)system.getUser(userID);
-            EvaluationsInterface(teacher);
+            Teacher *teacher = dynamic_cast<Teacher*>(system.getUser(userID));
+            if (teacher) {
+                EvaluationsInterface(teacher);
+            } else {
+                cout << "Invalid User ID!" << endl;
+            }
             break;
         }
         case 0:
-        {
             cout << "Goodbye!" << endl;
             break;
-        }
         default:
-        {
             cout << "Invalid option selected. Please try again!" << endl;
-            teachersInterface(system);
-        }
+            break;
         }
     }
+}
+void createObjectsFromCSV(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error: Could not open file " << filename << endl;
+        return;
+    }
+    string line;
+    while (getline(file, line)) {
+        istringstream iss(line);
+        string type, temp, name;
+        int id;
+        getline(iss, type, '\n'); // Extract type
+        int comaIndex = type.find(',');
+        temp = type.substr(0,comaIndex); // Assign type to temp for comparison
+        type=type.substr(comaIndex+1);
+        if (temp == "Program") 
+        {
+            string name;
+            string tempid;
+            int id;
+            int index = 0;
+            // Extracting id from type
+            while (type[index] != ',')
+            {
+                tempid += type[index];
+                index++;
+            }
+            id = stoi(tempid);
+            // Skipping the comma
+            index++;
+            // Extracting name from the rest of the string
+            while (index < type.length())
+            {
+                name += type[index];
+                index++;
+            }
+            Program* program = new Program(id, name);
+            programs.push_back(program);
+
+            type,temp,name="";
+            id=0;
+        }
+        else if (temp == "Course") {
+        string name;
+        string tempid;
+        int id;
+        int index = 0;
+
+        // Extracting id from type
+        while (type[index] != ',')
+        {
+            tempid += type[index];
+            index++;
+        }
+        id = stoi(tempid);
+
+        // Skipping the comma
+        index++;
+
+        // Extracting name from the rest of the string
+        while (type[index] != ',')
+        {
+            name += type[index];
+            index++;
+        }
+
+        Course* course = new Course(id, name);
+        courses.push_back(course);
+
+        // Skipping the comma
+        index++;
+
+        // Extracting program ID from the rest of the string
+        string programIDStr;
+        while (index < type.size())
+        {
+            programIDStr += type[index];
+            index++;
+        }
+
+        // Converting program ID string to integer
+        int programID = stoi(programIDStr);
+
+        // Finding the program with the matching ID and adding the course to it
+        for (int i = 0; i < programs.size(); i++)
+        {
+            if (programs[i]->getProgramID() == programID)
+            {
+                programs[i]->addCourse(course);
+                break; // Once found, no need to continue searching
+            }
+        }
+        type,temp,name="";
+        id=0;
+
+    }   
+
+        else if (temp == "CLO") {
+            string name;
+            string tempid;
+            int id;
+            int index = 0;
+            // Extracting id from type
+            while (type[index] != ',')
+            {
+                tempid += type[index];
+                index++;
+            }
+            id= stoi(tempid);
+            // Skipping the comma
+            index++;
+            // Extracting name from the rest of the string
+            while (type[index] != ',')
+            {
+                name += type[index];
+                index++;
+            }
+            index++;
+            CLO* clo = new CLO(id);
+            clos.push_back(clo);
+            clo->updateDescription(name);
+
+            string CourseIDStr;
+            while (index < type.size())
+            {
+                CourseIDStr += type[index];
+                index++;
+            }
+
+            // Converting Course ID string to integer
+            int CourseID = stoi(CourseIDStr);
+
+            for (int i = 0; i < courses.size(); i++)
+            {
+                if (courses[i]->getCourseID() == CourseID)
+                {
+                    courses[i]->addCLO(clo);
+                    break;
+                }
+            }
+            type,temp,name="";
+            id=0;
+        } 
+        else if (temp == "PLO") 
+        {
+            string name;
+            string tempid;
+            int id;
+            int index = 0;
+            // Extracting id from type
+            while (type[index] != ',')
+            {
+                tempid += type[index];
+                index++;
+            }
+            id = stoi(tempid);
+            // Skipping the comma
+            index++;
+            // Extracting name from the rest of the string
+            while (type[index] != ',')
+            {
+                name += type[index];
+                index++;
+            }
+            index++;
+            PLO* plo = new PLO(id,name);
+            plos.push_back(plo);
+            plo->updateDescription(name);
+
+            string CLOIDStr;
+            while (index < type.size())
+            {
+                CLOIDStr += type[index];
+                index++;
+            }
+            int clo_id = stoi(CLOIDStr);
+            for (int i = 0; i < clos.size(); i++)
+            {
+                if (clos[i]->getID() == clo_id)
+                {
+                    plo->addCLO(clos[i]);
+                    break;
+                }
+            }
+            type,temp,name="";
+            id=0;
+
+        } 
+        else if (temp == "AcademicOfficer") 
+        {
+            string name;
+            string tempid;
+            int id;
+            int index = 0;
+            // Extracting id from type
+            while (type[index] != ',')
+            {
+                tempid += type[index];
+                index++;
+            }
+            id = stoi(tempid);
+            // Skipping the comma
+            index++;
+            // Extracting name from the rest of the string
+            while (type[index] != ',')
+            {
+                name += type[index];
+                index++;
+            }
+            index++;
+            AcademicOfficer* officer = new AcademicOfficer(name,id);
+            academicOfficers.push_back(officer);
+
+            type,temp,name="";
+            id=0;
+
+        } 
+        else if (temp == "Teacher") {
+            string name;
+            string tempid;
+            int id;
+            int index = 0;
+            // Extracting id from type
+            while (type[index] != ',')
+            {
+                tempid += type[index];
+                index++;
+            }
+            id = stoi(tempid);
+            // Skipping the comma
+            index++;
+            // Extracting name from the rest of the string
+            while (type[index] != ',')
+            {
+                name += type[index];
+                index++;
+            }
+            index++;
+            Teacher* teacher = new Teacher(name,id);
+            teachers.push_back(teacher);
+
+            string courseIDStr;
+            while(index < type.length())
+            {
+                courseIDStr += type[index];
+                index++;
+                
+            }
+            int courseID = stoi(courseIDStr);
+            for (int i = 0; i < courses.size(); i++)
+            {
+                if (courses[i]->getCourseID() == courseID)
+                {
+                    teacher->addTaughtCourse(courses[i]);
+                    break;
+                }
+            }
+            type,temp,name="";
+            id=0;
+        } 
+        else if (temp == "Evaluation") 
+        {
+            string name;
+            string tempid;
+            int id;
+            int index = 0;
+            // Extracting id from type
+            while (type[index] != ',')
+            {
+                tempid += type[index];
+                index++;
+            }
+            id = stoi(tempid);
+            // Skipping the comma
+            index++;
+            // Extracting name from the rest of the string
+            while (type[index] != ',')
+            {
+                name += type[index];
+                index++;
+            }
+            index++;
+            Evaluation* evaluation = new Evaluation(name,id);
+            evaluations.push_back(evaluation);
+
+            string courseIDStr;
+            while(type[index] != ',')
+            {
+                courseIDStr += type[index];
+                index++;
+            }
+            int courseID = stoi(courseIDStr);
+            for (int i = 0; i < courses.size(); i++)
+            {
+                if (courses[i]->getCourseID() == courseID)
+                {
+                    courses[i]->addEvaluation(evaluation);
+                    break;
+                }
+            }
+            index++;
+            string TeacherId;
+            while(index < type.length())
+            {
+                TeacherId += type[index];
+                index++;
+            }
+            int t_id=stoi(TeacherId);
+            for (int i = 0; i < teachers.size(); i++)
+            {
+                if (teachers[i]->getID() == t_id)
+                {
+                    teachers[i]->addEvaluation(evaluation);
+                    break;
+                }
+            }
+            type,temp,name="";
+            id=0;
+        }
+    }
+    file.close();
+
 }
 
 int main()
 {
-    Program *program1 = new Program(1, "Software Engineering");
-    Program *program2 = new Program(2, "Computer Science");
-
-    // Creating courses
-    Course *course1 = new Course(101, "Introduction to Programming");
-    Course *course2 = new Course(102, "Software Design");
-
-    // Adding courses to programs
-    program1->addCourse(course1);
-    program1->addCourse(course2);
-
-    // Creating CLOs
-    CLO *clo1 = new CLO(1);
-    CLO *clo2 = new CLO(2);
-
-    // Adding CLOs to courses
-    course1->addCLO(clo1);
-    course2->addCLO(clo2);
-
-    // Creating PLOs
-    PLO *plo1 = new PLO(1, "Problem Solving");
-    PLO *plo2 = new PLO(2, "Teamwork");
-
-    // Adding CLOs to PLOs
-    plo1->addCLO(clo1);
-    plo2->addCLO(clo2);
-
-    // Creating academic officers
-    AcademicOfficer *officer1 = new AcademicOfficer("Muhammad Tayyab", 1);
-    AcademicOfficer *officer2 = new AcademicOfficer("Tauqeer Ahson", 2);
-
-    // Creating teachers
-    Teacher *teacher1 = new Teacher("John Doe", 101);
-    Teacher *teacher2 = new Teacher("Jane Doe", 102);
-
-    // Adding taught courses to teachers
-    teacher1->addTaughtCourse(course1);
-    teacher2->addTaughtCourse(course2);
-
-    // Adding evaluations
-    Evaluation *evaluation1 = new Evaluation("Quiz");
-    Evaluation *evaluation2 = new Evaluation("Assignment");
-
-    // Adding evaluations to courses
-    //course1->addEvaluation(evaluation1);
-    course2->addEvaluation(evaluation2);
-
-    // adding evaluations to teachers
-    teacher1->addEvaluation(evaluation1);
-    teacher2->addEvaluation(evaluation2);
-
+    createObjectsFromCSV("file.csv");
     OBESupportSystem system;
-    system.addUser(officer1);
-    system.addUser(officer2);
-    system.addUser(teacher1);
-    system.addUser(teacher2);
 
-    system.addProgram(program1);
-    system.addProgram(program2);
+    // Add academic officers to the system
+    for (AcademicOfficer* officer : academicOfficers)
+    {
+        system.addUser(officer);
+    }
+
+    // Add teachers to the system
+    for (Teacher* teacher : teachers)
+    {
+        system.addUser(teacher);
+    }
+
+    // Add programs to the system
+    for (Program* program : programs)
+    {
+        system.addProgram(program);
+    }
+    
 
     cout << "Welcome to Our Outcome Based Education Support System" << endl;
     cout << "Are you a Teacher or an Academic Officer? (t/a)" << endl;
@@ -335,7 +642,7 @@ int main()
         cout << "Welcome Teacher!" << endl;
         teachersInterface(system);
     }
-    if (selection == 'a')
+    else if (selection == 'a') // Changed to else if
     {
         cout << "Welcome Academic Officer!" << endl;
         academicOfficerInterface(system);
