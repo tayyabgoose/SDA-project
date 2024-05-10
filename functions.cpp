@@ -19,7 +19,15 @@ void Program::manageProgram()
     cout << "3. delete Program" << endl;
     int option;
     std::cin >> option;
-    int courseID=courses.back()->getCourseID()+1;
+    int courseID;
+    if(courses.size()==0)
+    {
+        courseID=1;
+    }
+    else{
+
+        courseID=courses.back()->getCourseID()+1;
+    }
     string courseName;
     switch (option)
     {
@@ -121,6 +129,27 @@ Course::Course(int courseID, string courseName)
 void Course::setName(string courseName)
 {
     name = courseName;
+}
+Teacher* Course::getTeacher()
+{
+    return tr;
+}
+int Course::getProgramID()
+{
+    if (pr != nullptr)
+    {
+        return pr->getProgramID();
+    }
+    else
+    {
+        // Handle the case where the program pointer is null
+        return -1; // or any other suitable default value
+    }
+}
+
+Program* Course::getProgram()
+{
+    return pr;
 }
 void Course::setDescription(string courseDescription)
 {
@@ -343,9 +372,23 @@ int PLO::getID()
 {
     return ID;
 }
+string PLO::getDescription()
+{
+    return description;
+}
 vector<CLO *> PLO::getRelatedCLOs()
 {
     return relatedCLOs;
+}
+CLO *PLO::getCLO(int cloID)
+{
+    for (int i = 0; i < relatedCLOs.size(); i++)
+    {
+        if (relatedCLOs[i]->getID() == cloID)
+        {
+            return relatedCLOs[i];
+        }
+    }
 }
 void PLO::updateDescription(string cloDescription)
 {
@@ -362,6 +405,10 @@ CLO::CLO(int cloID)
 int CLO::getID()
 {
     return ID;
+}
+Course * CLO::getCourse()
+{
+    return cr;
 }
 vector<PLO *> CLO::getRelatedPLOs()
 {
@@ -437,6 +484,15 @@ void Evaluation::setEvaluationId()
 float Evaluation::getMarks()
 {
     return marks;
+}
+
+Course* Evaluation::getCourse()
+{
+    return cr;
+}
+Teacher* Evaluation::getTeacher()
+{
+    return tr;
 }
 void Evaluation::setMarks(float evaluationMarks)
 {

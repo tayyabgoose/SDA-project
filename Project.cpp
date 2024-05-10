@@ -608,6 +608,109 @@ void createObjectsFromCSV(const string& filename) {
     file.close();
 
 }
+void writeToCSV(const string& filename)
+{
+    ofstream file(filename);
+    
+    if (!file.is_open())
+    {
+        cerr << "Error: Could not open file " << filename << endl;
+        return;
+    }
+
+    for (Program* program : programs)
+    {
+        file << "Program" << "," << program->getProgramID() << "," << program->getProgramName() << endl;
+    }
+    // Write courses to file
+    for (Course* course : courses)
+    {
+        file << "Course" << "," << course->getCourseID() << "," << course->getCourseName() << ",";
+        for (int i = 0; i < programs.size(); i++)
+        {
+            for(int j=0;j<programs[i]->getCourses().size();j++)
+            {
+            if(programs[i]->getCourses().size() > 0 && programs[i]->getCourses()[j]->getCourseID() == course->getCourseID() )
+            {
+                file << programs[i]->getProgramID() << endl;
+            }
+            }
+            
+        }
+        
+    }
+
+    // Write CLOs to file
+    for (CLO* clo : clos)
+    {
+        file << "CLO" << "," << clo->getID() << "," << clo->getDescription() << ",";
+        for (int i = 0; i < courses.size(); i++)
+        {
+            for(int j=0;j<courses[i]->getCLOs().size();j++)
+            {
+            if(courses[i]->getCLOs().size() > 0 && courses[i]->getCLOs()[j]->getID() == clo->getID() )
+            {
+                file << courses[i]->getCourseID() << endl;
+            }
+            }
+            
+        }
+    }
+    // Write PLOs to file
+    for (PLO* plo : plos)
+    {
+        // Ensure that plos and clos vectors are of the same size and have valid indices
+        file << "PLO" << "," << plo->getID() << "," << plo->getDescription() << ",";
+        for (int i = 0; i < clos.size(); i++)
+        {
+            for(int j=0;j<clos[i]->getRelatedPLOs().size();j++)
+            {
+                if(clos[i]->getRelatedPLOs().size() > 0 && clos[i]->getRelatedPLOs()[j]->getID() == plo->getID() )
+                {
+                    file << clos[i]->getID() << endl;
+                }
+            }
+            
+        }
+    }
+
+    // Write academic officers to file
+    for (AcademicOfficer* officer : academicOfficers)
+    {
+        file << "Academic Officer" << "," << officer->getID() << "," << officer->getName() << endl;
+        
+    }
+    // Write teachers to file
+    for (Teacher* teacher : teachers)
+    {
+        // Ensure that teachers and courses vectors are of the same size and have valid indices
+        file << "Teacher" << "," << teacher->getID() << "," << teacher->getName() << ",";
+            for (int i = 0; i < teachers.size(); i++)
+            {
+                for(int j=0;j<courses.size();j++)
+                {
+                if(courses[j]->getTeacher()->getID() == teacher->getID())
+                {
+                    file << courses[j]->getCourseID() << endl;
+                }
+                
+            }
+    }
+    }
+
+    // Write evaluations to file
+    for (Evaluation* evaluation : evaluations)
+    {
+        file << "Evaluation" << "," << evaluation->getID() << "," << evaluation->getType() << ",";
+        for (int i = 0; i < evaluation->getRelatedCLOs().size(); i++)
+        {
+            file << evaluation->getRelatedCLOs()[i]->getID() << ",";
+        }
+    }
+
+    file.close();
+}
+
 
 int main()
 {
@@ -651,5 +754,8 @@ int main()
     {
         cout << "Invalid user role. Only Teachers and Academic Officers are allowed." << endl;
     }
+
+    writeToCSV("file_2.csv");
+
     return 0;
 }

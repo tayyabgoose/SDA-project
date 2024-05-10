@@ -19,6 +19,7 @@ class CLO;
 class Evaluation;
 class Question;
 class OBESupportSystem;
+class Teacher;
 class Program
 {
 private:
@@ -61,12 +62,21 @@ private:
     string name;
     string description;
     vector<CLO *> CLOs;
+    Program *pr;
+    Teacher *tr;
     vector<Evaluation *> evaluations;
 
 public:
     Course(int courseID, string courseName);
 
     void setName(string courseName);
+
+    //after submission of the project
+    Program *getProgram();
+    //after submission of the project
+    Teacher *getTeacher();
+
+    int getProgramID();
 
     void setDescription(string courseDescription);
 
@@ -120,6 +130,10 @@ public:
 
     int getID();
     vector<CLO *> getRelatedCLOs();
+    //after submission of the project
+    CLO *getCLO(int cloID);
+    //after submission of the project
+    string getDescription();
 
     void updateDescription(string cloDescription);
 
@@ -134,11 +148,15 @@ private:
     string description;
     vector<string> topics;
     vector<PLO *> relatedPLOs;
+    Course *cr;
 
 public:
     CLO(int cloID);
 
     int getID();
+
+    //after submission of the project
+    Course *getCourse();
 
     vector<PLO *> getRelatedPLOs();
 
@@ -166,6 +184,8 @@ private:
     float marks;
     vector<CLO *> relatedCLOs;
     vector<Question *> questions;
+    Course *cr;
+    Teacher *tr;
 
 public:
     Evaluation(string evaluationType,int id);
@@ -175,6 +195,11 @@ public:
     int getID();
     //after submission of the project
     void setEvaluationId();
+
+    //after submission of the project
+    Course* getCourse();
+    //after submission of the project
+    Teacher* getTeacher();
 
     float getMarks();
 
@@ -313,8 +338,6 @@ public:
     void addEvaluationDetails(Evaluation *evaluation);
     //after submission of the project
     void viewEvaluationDetails();
-    //after submission of the project
-    // void addEvaluation(Evaluation *evaluation);
 
     void listclosofCourse(int courseID);
 
