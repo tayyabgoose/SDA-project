@@ -372,7 +372,21 @@ private:
     vector<User *> users;
     vector<Program *> programs;
 
+    static OBESupportSystem *instance;
+
 public:
+static OBESupportSystem* getInstance()
+    {
+        if(instance==NULL)
+        {
+            instance=new OBESupportSystem();
+            return instance;
+        }
+        else
+        {
+            cout<<"Instance already exists"<<endl;
+        }
+    }
     void addProgram(Program *pr);
 
     void removeProgram(Program *pr);

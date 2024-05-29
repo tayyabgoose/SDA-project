@@ -15,15 +15,15 @@ vector<Teacher*> teachers;
 vector<AcademicOfficer*> academicOfficers;
 vector<Evaluation*> evaluations;
 
-void ProgramsInterface(OBESupportSystem &system)
+void ProgramsInterface(OBESupportSystem *system)
 {
     // Option to add, remove, and update programs
     // Show a list and details of current program(s)
     cout << "Programs" << endl;
-    system.listPrograms();
-    system.manageProgram();
+    system->listPrograms();
+    system->manageProgram();
     cout << "Programs" << endl;
-    system.listPrograms();
+    system->listPrograms();
 }
 
 void CoursesInterface(Program *pr)
@@ -198,7 +198,7 @@ void EvaluationsInterface(Teacher *teacher)
 
 }
 
-void academicOfficerInterface(OBESupportSystem &system)
+void academicOfficerInterface(OBESupportSystem *system)
 {
     int option = 1000;
     while (option != 0)
@@ -217,10 +217,10 @@ void academicOfficerInterface(OBESupportSystem &system)
             break;
         case 2:
             cout << "Which Program's course(s) would you like to manage?" << endl;
-            system.listPrograms();
+            system->listPrograms();
             int programID;
             std::cin >> programID;
-            CoursesInterface(system.getProgram(programID));
+            CoursesInterface(system->getProgram(programID));
             academicOfficerInterface(system);
             break;
         case 3:
@@ -236,7 +236,7 @@ void academicOfficerInterface(OBESupportSystem &system)
     }
 }
 
-void teachersInterface(OBESupportSystem &system)
+void teachersInterface(OBESupportSystem *system)
 {
     int option = 1000;
     while (option != 0)
@@ -251,10 +251,10 @@ void teachersInterface(OBESupportSystem &system)
         case 1:
         {
             cout << "which User are you?" << endl;
-            system.listTeachers();
+            system->listTeachers();
             int userID;
             std::cin >> userID;
-            Teacher *teacher = dynamic_cast<Teacher*>(system.getUser(userID));
+            Teacher *teacher = dynamic_cast<Teacher*>(system->getUser(userID));
             if (teacher) {
                 taughtCoursesInterface(teacher);
             } else {
@@ -265,10 +265,10 @@ void teachersInterface(OBESupportSystem &system)
         case 2:
         {
             cout << "which User are you?" << endl;
-            system.listTeachers();
+            system->listTeachers();
             int userID;
             std::cin >> userID;
-            Teacher *teacher = dynamic_cast<Teacher*>(system.getUser(userID));
+            Teacher *teacher = dynamic_cast<Teacher*>(system->getUser(userID));
             if (teacher) {
                 EvaluationsInterface(teacher);
             } else {
@@ -712,27 +712,33 @@ void writeToCSV(const string& filename)
 }
 
 
+
+OBESupportSystem* OBESupportSystem::instance = nullptr;
+
 int main()
 {
+
+    
     createObjectsFromCSV("file.csv");
-    OBESupportSystem system;
+    OBESupportSystem *system = OBESupportSystem::getInstance();
+
 
     // Add academic officers to the system
     for (AcademicOfficer* officer : academicOfficers)
     {
-        system.addUser(officer);
+        system->addUser(officer);
     }
 
     // Add teachers to the system
     for (Teacher* teacher : teachers)
     {
-        system.addUser(teacher);
+        system->addUser(teacher);
     }
 
     // Add programs to the system
     for (Program* program : programs)
     {
-        system.addProgram(program);
+        system->addProgram(program);
     }
     
 
